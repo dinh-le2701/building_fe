@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Form, Modal, Container, Pagination } from 'react-bootstrap';
-import AxiosInstance from '../../../api/AxiosInstance';
+import { Button, Table, Form, Modal, Pagination } from 'react-bootstrap';
+// import AxiosInstance from '../../../api/AxiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -10,8 +11,8 @@ import './Apartment.css'
 
 const Apartments = () => {
     const [show, setShow] = useState(false);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [setError] = useState('');
+    const [setLoading] = useState(true);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
     const [currentPage, setCurrentPage] = useState(0);

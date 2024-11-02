@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Image, Container } from 'react-bootstrap'
+import {  Image, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import './Header.css'
 
@@ -12,9 +12,9 @@ const Header = () => {
                 </div>
                 <div className="header-navigation w-50  d-flex -justify-content-between align-items-center">
                     <a className='me-5' href="#Home">Home</a>
-                    <a className='me-5' href="">About Us</a>
-                    <a className='me-5' href="">Agent</a>
-                    <a className='me-5' href="">Blog</a>
+                    <a className='me-5' href="#About">About Us</a>
+                    <a className='me-5' href="#Agent">Agent</a>
+                    <a className='me-5' href="#Blog">Blog</a>
                 </div>
                 <div className="header-login">
                     <Link className='btn btn-primary' to={"/login"} >Login</Link>

@@ -52,11 +52,14 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.jsx?$": "babel-jest"
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
     },
     "moduleNameMapper": {
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
+      "\\.(css|less|scss)$": "identity-obj-proxy"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios)"
+    ]
   },
   "babel": {
     "presets": [

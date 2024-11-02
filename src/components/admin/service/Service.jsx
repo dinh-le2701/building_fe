@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Table, Form, Modal, Container } from 'react-bootstrap';
+import React from 'react';
+import { Button, Table, Form } from 'react-bootstrap';
 import './Service.css'
 
 const Service = () => {

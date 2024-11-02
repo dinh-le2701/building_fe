@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-const-assign */
+import React, { useState } from 'react';
 import { Button, Table, Form, Pagination } from 'react-bootstrap';
 import 'react-notifications-component/dist/theme.css';
 
 const Notification = () => {
   // send email
   const [mail, setMail] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages] = useState(0);
   const [size, setSize] = useState(5); // Số mục trên mỗi trang, mặc định là 5
 
   const handlePageChange = (newPage) => {

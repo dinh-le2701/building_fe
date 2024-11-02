@@ -10,7 +10,7 @@ function ProtectedRoute({ children, allowedRole }) {
 }
 
 function App() {
-  const role = sessionStorage.getItem('role'); // Lấy role từ sessionStorage sau khi đăng nhập
+  // const role = sessionStorage.getItem('role'); // Lấy role từ sessionStorage sau khi đăng nhập
 
   return (
     <div className="App">

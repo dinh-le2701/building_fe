@@ -5,7 +5,7 @@ import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
 import { MdDateRange } from "react-icons/md";
-import { ReactNotifications, Store } from 'react-notifications-component';
+import {  Store } from 'react-notifications-component';
 
 
 

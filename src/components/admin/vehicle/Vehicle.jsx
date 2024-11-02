@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import fetchURL from '../../../api/AxiosInstance';
@@ -6,14 +7,8 @@ import { Link } from 'react-router-dom'
 const Vehicle = () => {
 
     const [residents, setResidents] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [newResident, setNewVehicle] = useState({
-        vehicle_name: "",
-        license_plate: "",
-        vehicle_type: "",
-        color: "",
-    });
+    const [setLoading] = useState(true);
+    const [setError] = useState(null);
 
     useEffect(() => {
         // Fetch resident data from your API

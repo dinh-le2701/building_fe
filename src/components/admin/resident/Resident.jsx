@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Form, Modal, Container } from 'react-bootstrap';
+import { Button, Table, Form, Modal } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';
-import fetchURL from '../../../api/AxiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -11,8 +11,8 @@ const Resident = () => {
     const [show, setShow] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // Track if in edit mode
     const [residents, setResidents] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [setLoading] = useState(true);
+    const [setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [size, setSize] = useState(5); // Số mục trên mỗi trang, mặc định là 10
@@ -34,11 +34,11 @@ const Resident = () => {
 
     const [currentResidentId, setCurrentResidentId] = useState(null); // To store the resident ID for editing
 
-    const formatDate = (dateString) => {
-        // Chuyển đổi chuỗi "yyyy/MM/dd" thành "yyyy-MM-dd"
-        const [year, month, day] = dateString.split('/');
-        return `${year}-${month}-${day}`;
-    };
+    // const formatDate = (dateString) => {
+    //     // Chuyển đổi chuỗi "yyyy/MM/dd" thành "yyyy-MM-dd"
+    //     const [year, month, day] = dateString.split('/');
+    //     return `${year}-${month}-${day}`;
+    // };
 
     useEffect(() => {
         fetchResidents(currentPage, size);
@@ -73,23 +73,23 @@ const Resident = () => {
         }
     };
 
-    const loadResidents = async (page, size) => {
-        try {
-            const response = await fetch(`http://localhost:8908/api/v1/resident`);
+    // const loadResidents = async (page, size) => {
+    //     try {
+    //         const response = await fetch(`http://localhost:8908/api/v1/resident`);
             
-            if (!response.ok) {
-                throw new Error('Failed to fetch staff data');
-            }
-            const data = await response.json();
-            setResidents(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-            setTotalPages(data.totalPages); 
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch staff data');
+    //         }
+    //         const data = await response.json();
+    //         setResidents(data.content); // Giả sử dữ liệu được trả về trong `data.content`
+    //         setTotalPages(data.totalPages); 
             
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     } catch (error) {
+    //         setError(error.message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     // Handle form submit
     const handleSubmits = (e) => {
