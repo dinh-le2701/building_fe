@@ -1,0 +1,12 @@
+/* .sidebar {
+    background: #d6d6d6;
+} */
+
+.sidebar-content {
+    position: sticky;
+    top: 0;
+    
+}
+.btn-click {
+    transition: ease-in 0.5s;
+}
