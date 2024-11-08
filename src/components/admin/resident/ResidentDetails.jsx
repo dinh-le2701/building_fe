@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Container } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
 import { Link } from 'react-router-dom'
-import fetchURL from '../../api/AxiosInstance';
+import fetchURL from '../../../api/AxiosInstance';
 
 const ResidentDetails = () => {
   const { id } = useParams(); // Lấy id từ URL
@@ -32,7 +33,7 @@ const ResidentDetails = () => {
       style={{ height: '92vh' }}>
       <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
         <h3 className='m-0'>Chi Tiết Cư Dân</h3>
-        <Link className='pe-3' to={"/resident"}>
+        <Link className='pe-3' to={"/admin/resident"}>
           <b>Trở về</b>
         </Link>
       </div>

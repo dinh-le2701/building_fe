@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal, Pagination } from 'react-bootstrap';
-// import AxiosInstance from '../../../api/AxiosInstance';
+import AxiosInstance from '../../../api/AxiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -11,8 +12,8 @@ import './Apartment.css'
 
 const Apartments = () => {
     const [show, setShow] = useState(false);
-    const [setError] = useState('');
-    const [setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -28,6 +29,22 @@ const Apartments = () => {
         create_at: new Date().toISOString().slice(0, 19).replace('T', ' '), // Tạo giá trị cho create_at,
         update_at: null
     });
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [results, setResults] = useState([]);
+
+    const handleSearch = async (e) => {
+        e.preventDefault(); // Prevent form submission reload
+        try {
+            const response = await AxiosInstance.get(`/api/v1/apartment/search`, {
+                params: { name: searchTerm }
+            });
+            setResults(response.data); // Set results based on response
+            console.log("Search results:", response.data);
+        } catch (error) {
+            console.error("Error searching apartments:", error);
+        }
+    };
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
             setCurrentPage(newPage);
@@ -43,7 +60,7 @@ const Apartments = () => {
 
     const fetchApartments = async (page, size) => {
         try {
-            const response = await fetch(`http://localhost:8909/api/v1/apartment?page=${page}&size=${size}`);
+            const response = await fetch(`http://localhost:8909/api/v1/apartment`); //?page=${page}&size=${size}
             if (!response.ok) {
                 throw new Error('Failed to fetch staff data');
             }
@@ -128,8 +145,7 @@ const Apartments = () => {
 
     const navigate = useNavigate(); // Hook điều hướng
     const handleResidentDetails = (apartment_id) => {
-        // Navigate to the resident details page with the ID in the URL
-        navigate(`/apartment/${apartment_id}`);
+        navigate(`/admin/apartment/${apartment_id}`);
     };
 
     return (
@@ -155,11 +171,16 @@ const Apartments = () => {
                     </div>
 
                     <div className="search">
-                        <Form className='d-flex'>
+                        <Form className='d-flex' onSubmit={handleSearch}>
                             <Form.Group>
-                                <Form.Control />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter apartment name"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
                             </Form.Group>
-                            <Button type='submit'>Tìm</Button>
+                            <Button type='submit'>Tìm</Button>
                         </Form>
                     </div>
                 </div>

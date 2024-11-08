@@ -12,6 +12,8 @@ import Accounts from './accounts/Accounts'
 import Staff from './staff/Staff'
 import StaffDetail from './staff/StaffDetail'
 import Service from './service/Service'
+import ApartmentDetails from './apartments/ApartmentDetails'
+import ResidentDetails from './resident/ResidentDetails'
 
 const Admin = () => {
   return (
@@ -30,13 +32,17 @@ const Admin = () => {
             <Route path='/admin' element={<Home />} />
 
             <Route path='/resident' element={<Resident />} />
+            <Route path='/resident/:id' element={<ResidentDetails />} />
+
             <Route path='/vehicle' element={<Vehicle />} />
             <Route path='/apartment' element={<Apartments />} />
+            <Route path='/apartment/:id' element={<ApartmentDetails/>}/>
+
             <Route path='/services' element={<Service />} />
 
             <Route path='/account' element={<Accounts />} />
             <Route path='/staff' element={<Staff />} />
-            <Route path='/admin/staff/:id' element={<StaffDetail/>}/>
+            <Route path='/staff/:id' element={<StaffDetail/>}/>
             <Route path='/notification' element={<Notification />} />
           </Routes>
         </Col>

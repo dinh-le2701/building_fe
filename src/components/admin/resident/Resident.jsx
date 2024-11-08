@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
@@ -11,8 +12,8 @@ const Resident = () => {
     const [show, setShow] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // Track if in edit mode
     const [residents, setResidents] = useState([]);
-    const [setLoading] = useState(true);
-    const [setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [size, setSize] = useState(5); // Số mục trên mỗi trang, mặc định là 10
@@ -222,7 +223,7 @@ const Resident = () => {
     const navigate = useNavigate(); // Hook điều hướng
     const handleResidentDetails = (resident_id) => {
         // Navigate to the resident details page with the ID in the URL
-        navigate(`/resident/${resident_id}`);
+        navigate(`/admin/resident/${resident_id}`);
     };
 
     const handleClose = () => setShow(false);

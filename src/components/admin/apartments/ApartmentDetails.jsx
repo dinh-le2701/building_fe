@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
 import { Link } from 'react-router-dom'
-import fetchURL from '../../api/AxiosInstance';
+import fetchURL from '../../../api/AxiosInstance';
 
 const ApartmentDetails = () => {
     const [show, setShow] = useState(false);
@@ -51,7 +53,7 @@ const ApartmentDetails = () => {
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Chi Tiết Căn Hộ</h3>
                 <div>
-                    <Link className='px-3' to={"/apartment"}>
+                    <Link className='px-3' to={"/admin/apartment"}>
                         <b>Trở về</b>
                     </Link>
                     <Button onClick={handleShow}>Thêm Cư Dân</Button>

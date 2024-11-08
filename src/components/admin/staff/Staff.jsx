@@ -5,8 +5,7 @@ import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
 import { MdDateRange } from "react-icons/md";
-import {  Store } from 'react-notifications-component';
-
+import { ReactNotifications, Store } from 'react-notifications-component';
 
 
 const Staff = () => {
@@ -44,7 +43,7 @@ const Staff = () => {
     };
     const handleResidentSubmit = async (apartmentData) => {
         try {
-            const response = await fetch('http://172.23.208.1:8907/api/v1/staff', {
+            const response = await fetch('http://localhost:8907/api/v1/staff', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,12 +56,11 @@ const Staff = () => {
                 console.log('Resident created successfully', data);
                 setStaffs([...staffs, data]); // Add the new resident to the list
                 handleClose(); // Close the modal after successful creation
-                getStaffs();
+                getAllStaff();
 
 
                 Store.addNotification({
-                    title: "Login Successful!",
-                    message: "Welcome back!",
+                    title: "Create new staff successful!",
                     type: "success", // green color for success
                     insert: "top",
                     container: "top-left",
@@ -76,6 +74,16 @@ const Staff = () => {
             }
         } catch (error) {
             console.error('Error:', error);
+            Store.addNotification({
+                title: "Create new staff has failed!",
+                type: "danger", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 4000, // Auto-dismiss after 4 seconds
+                    onScreen: true
+                }
+            });
         }
     };
 
@@ -91,7 +99,21 @@ const Staff = () => {
             const data = await response.json();
             setStaffs(data.content); // Giả sử dữ liệu được trả về trong `data.content`
             setTotalPages(data.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
-            console.log(data);
+            Store.addNotification({
+                title: "Get all staff Successful!",
+                message: "Waiting to navigate dashboard",
+                type: "success", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                  duration: 2000, // Auto-dismiss after 4 seconds
+                  onScreen: true
+                }
+              });
+      
+              setTimeout(() => {
+              }, 2000);
+            
         } catch (error) {
             setError(error.message);
         } finally {
@@ -99,22 +121,36 @@ const Staff = () => {
         }
     };
 
-    const getStaffs = async (page, size) => {
-        try {
-            const response = await fetch(`http://localhost:8907/api/v1/staff`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch staff data');
-            }
-            const data = await response.json();
-            setStaffs(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-            setTotalPages(data.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
-            console.log(data);
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const getStaffs = async (page, size) => {
+    //     try {
+    //         const response = await fetch(`http://localhost:8907/api/v1/staff`);
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch staff data');
+    //         }
+    //         const data = await response.json();
+    //         setStaffs(data.content); // Giả sử dữ liệu được trả về trong `data.content`
+    //         setTotalPages(data.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
+    //         console.log(data);
+    //         Store.addNotification({
+    //             title: "Get all staff Successful!",
+    //             message: "Waiting to navigate dashboard",
+    //             type: "success", // green color for success
+    //             insert: "top",
+    //             container: "top-left",
+    //             dismiss: {
+    //               duration: 2000, // Auto-dismiss after 4 seconds
+    //               onScreen: true
+    //             }
+    //           });
+      
+    //           setTimeout(() => {
+    //           }, 2000);
+    //     } catch (error) {
+    //         setError(error.message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     // Gọi hàm API khi trang hoặc pageSize thay đổi
     useEffect(() => {
@@ -149,6 +185,19 @@ const Staff = () => {
             if (response.ok) {
                 console.log('Staff deleted successfully');
                 getAllStaff(currentPage, size); // Cập nhật lại danh sách căn hộ sau khi xóa
+                Store.addNotification({
+                    title: "Delete successfully!",
+                    type: "success", // green color for success
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                      duration: 2000, // Auto-dismiss after 4 seconds
+                      onScreen: true
+                    }
+                  });
+          
+                  setTimeout(() => {
+                  }, 2000);
             } else {
                 const errorData = await response.json();
                 console.error('Failed to delete staff:', errorData.message);
@@ -159,7 +208,9 @@ const Staff = () => {
     }
 
     return (
+        
         <div className='staff'>
+            <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Nhân Viên</h3>
                 <Button className='me-3' onClick={handleShowAdd}>Thêm mới</Button>

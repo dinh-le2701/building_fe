@@ -49,27 +49,46 @@ const Login = () => {
             onScreen: true
           }
         });
-        
-      } else {
-        // Successful login: Save the token to localStorage
-        sessionStorage.setItem('token', data.token);
-        sessionStorage.setItem('role', 'ADMIN');
 
-        // Success notification
+      } else if (data.role !== "ADMIN"){
         Store.addNotification({
-          title: "Login Successful!",
-          message: "Welcome back!",
-          type: "success", // green color for success
+          title: "Login Failed!",
+          message: "Your account does not have access",
+          type: "warning", // green color for success
           insert: "top",
           container: "top-left",
           dismiss: {
-            duration: 4000, // Auto-dismiss after 4 seconds
+            duration: 2000, // Auto-dismiss after 4 seconds
             onScreen: true
           }
         });
 
-        console.log("Login successful:", data);
-        navigate('/admin');
+        setTimeout(() => {
+          navigate('/admin');
+        }, 2000);
+      }
+      
+      else {
+        // Successful login: Save the token to localStorage
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('role', data.role);
+
+        // Success notification
+        Store.addNotification({
+          title: "Login Successful!",
+          message: "Waiting to navigate dashboard",
+          type: "success", // green color for success
+          insert: "top",
+          container: "top-left",
+          dismiss: {
+            duration: 1000, // Auto-dismiss after 4 seconds
+            onScreen: true
+          }
+        });
+
+        setTimeout(() => {
+          navigate('/admin');
+        }, 1000);
       }
     } catch (error) {
       console.error("Error during login:", error);
