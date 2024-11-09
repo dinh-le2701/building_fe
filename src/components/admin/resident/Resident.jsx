@@ -10,7 +10,9 @@ const Resident = () => {
     const [show, setShow] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // Track if in edit mode
     const [residents, setResidents] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(true);
+    // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
