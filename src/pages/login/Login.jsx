@@ -62,10 +62,6 @@ const Login = () => {
             onScreen: true
           }
         });
-
-        setTimeout(() => {
-          navigate('/admin');
-        }, 2000);
       }
       
       else {

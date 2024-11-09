@@ -40,7 +40,8 @@ const Sidebar = () => {
                     <Nav className="btn-click me-auto mb-3">
                         <Nav.Link className='w-100 text-center' href="/admin">
                             <Container >
-                                <Image width={"70%"} height={"70%"} src='https://building-management-store-img.s3.amazonaws.com/2128c770dec2679c3ed3.jpg' roundedCircle />
+                                <Image width={"60%"} height={"60%"} src='https://building-management-store-img.s3.amazonaws.com/2128c770dec2679c3ed3.jpg' roundedCircle />
+                                <h1>KyotoEstate</h1>
                             </Container>
                         </Nav.Link>
                     </Nav>

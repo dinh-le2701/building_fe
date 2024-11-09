@@ -26,7 +26,6 @@ const Admin = () => {
 
         {/* Cột chứa Header và nội dung */}
         <Col xs={12} lg={10} className='content-col p-0'>
-          {/* <Header /> */}
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/admin' element={<Home />} />

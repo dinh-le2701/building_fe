@@ -30,8 +30,8 @@ const Home = () => {
     return (
         <div className='home'>
             {/* <ToastContainer /> */}
-            <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
-                <h2 className='m-0'>Trang Chủ</h2>
+            <div className='header p-3 w-100 bg-white d-flex justify-content-around align-items-center'>
+                <h1 className='m-0 fw-bold'>Trang Chủ</h1>
             </div>
 
             <div className='p-4'>
@@ -55,7 +55,7 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="charts bg-light mx-4 pt-5">
+            <div className="charts bg-light mx-4 pt-3">
                 <LineCharts />
             </div>
         </div>

@@ -1,18 +1,15 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal, Pagination } from 'react-bootstrap';
-import AxiosInstance from '../../../api/AxiosInstance';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import { FaEye } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
-import { CiTrash } from "react-icons/ci";
-import './Apartment.css'
-
+import { CiEdit, CiTrash } from "react-icons/ci";
+import './Apartment.css';
 
 const Apartments = () => {
     const [show, setShow] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState('');
+    // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(true);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
@@ -26,60 +23,59 @@ const Apartments = () => {
         number_of_room: "",
         price: "",
         status: "TRỐNG",
-        create_at: new Date().toISOString().slice(0, 19).replace('T', ' '), // Tạo giá trị cho create_at,
+        create_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
         update_at: null
     });
 
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
 
-    const handleSearch = async (e) => {
-        e.preventDefault(); // Prevent form submission reload
-        try {
-            const response = await AxiosInstance.get(`/api/v1/apartment/search`, {
-                params: { name: searchTerm }
-            });
-            setResults(response.data); // Set results based on response
-            console.log("Search results:", response.data);
-        } catch (error) {
-            console.error("Error searching apartments:", error);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm) {
+            // Lọc các căn hộ có tên chứa từ khóa tìm kiếm (không phân biệt chữ hoa và chữ thường)
+            const filteredApartments = apartments.filter(apartment =>
+                apartment.apartment_name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setResults(filteredApartments);  // Cập nhật kết quả tìm kiếm
+        } else {
+            setResults(apartments);  // Nếu không có từ khóa tìm kiếm, hiển thị tất cả các căn hộ
         }
     };
+
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
             setCurrentPage(newPage);
         }
     };
 
-    // Xử lý khi người dùng thay đổi số lượng mục hiển thị trên mỗi trang
     const handlePageSizeChange = (event) => {
         setSize(Number(event.target.value)); // Cập nhật pageSize
         setCurrentPage(0); // Reset về trang đầu tiên
     };
 
-
     const fetchApartments = async (page, size) => {
         try {
-            const response = await fetch(`http://localhost:8909/api/v1/apartment`); //?page=${page}&size=${size}
+            const response = await fetch(`http://localhost:8909/api/v1/apartment?page=${page}&size=${size}`); // Thực hiện lấy danh sách căn hộ
             if (!response.ok) {
-                throw new Error('Failed to fetch staff data');
+                throw new Error('Failed to fetch apartment data');
             }
             const data = await response.json();
-            setApartments(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-            setTotalPages(data.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
-            console.log(data);
+            setApartments(data.content); // Lưu dữ liệu căn hộ
+            setTotalPages(data.totalPages); // Lưu tổng số trang
+            setResults(data.content);  // Cập nhật results với toàn bộ căn hộ ban đầu
         } catch (error) {
             setError(error.message);
         } finally {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         fetchApartments(currentPage, size);
     }, [currentPage, size]);
 
-    // create new resident api
-    const createResident = async (apartmentData) => {
+    const createApartment = async (apartmentData) => {
         try {
             const response = await fetch('http://localhost:8909/api/v1/apartment', {
                 method: 'POST',
@@ -91,19 +87,18 @@ const Apartments = () => {
 
             const data = await response.json();
             if (response.ok) {
-                console.log('Resident created successfully', data);
-                setApartments([...apartments, data]); // Add the new resident to the list
-                handleClose(); // Close the modal after successful creation
-                fetchApartments();
+                setApartments([...apartments, data]); // Thêm căn hộ mới vào danh sách
+                setResults([...results, data]); // Cập nhật kết quả tìm kiếm
+                handleClose(); // Đóng modal sau khi thêm thành công
+                fetchApartments(); // Cập nhật lại danh sách căn hộ
             } else {
-                console.error('Failed to create resident:', data.message);
+                console.error('Failed to create apartment:', data.message);
             }
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    // handle form input change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setNewApartment(prevState => ({
@@ -112,18 +107,11 @@ const Apartments = () => {
         }));
     };
 
-    // handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
-        createResident(newApartment); // Pass the new resident data to the API
+        createApartment(newApartment); // Gửi thông tin căn hộ mới
     };
 
-    // update apartment by id
-    const updateApartmentById = async (id) => {
-
-    }
-
-    // delete apartment by id
     const deleteApartmentById = async (id) => {
         try {
             const response = await fetch(`http://localhost:8909/api/apartment/${id}`, {
@@ -131,7 +119,6 @@ const Apartments = () => {
             });
 
             if (response.ok) {
-                console.log('Apartment deleted successfully');
                 fetchApartments(); // Cập nhật lại danh sách căn hộ sau khi xóa
             } else {
                 const errorData = await response.json();
@@ -142,16 +129,15 @@ const Apartments = () => {
         }
     };
 
-
-    const navigate = useNavigate(); // Hook điều hướng
-    const handleResidentDetails = (apartment_id) => {
+    const navigate = useNavigate();
+    const handleApartmentDetails = (apartment_id) => {
         navigate(`/admin/apartment/${apartment_id}`);
     };
 
     return (
-        <div className='apartment'>
-            <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
-                <h3 className='m-0'>Danh Sách Căn Hộ</h3>
+        <div className="apartment">
+            <div className="header p-3 w-100 bg-white d-flex justify-content-between align-items-center">
+                <h3 className="m-0">Danh Sách Căn Hộ</h3>
                 <Button onClick={handleShow}>Thêm mới</Button>
             </div>
 
@@ -159,7 +145,7 @@ const Apartments = () => {
                 <div className="func-table d-flex justify-content-between align-items-center py-3">
                     <div className="select-group">
                         Hiển thị
-                        <select name="" id="" className="mx-2" value={size} onChange={handlePageSizeChange}>
+                        <select className="mx-2" value={size} onChange={handlePageSizeChange}>
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="15">15</option>
@@ -171,7 +157,7 @@ const Apartments = () => {
                     </div>
 
                     <div className="search">
-                        <Form className='d-flex' onSubmit={handleSearch}>
+                        <Form className="d-flex" onSubmit={handleSearch}>
                             <Form.Group>
                                 <Form.Control
                                     type="text"
@@ -180,12 +166,12 @@ const Apartments = () => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </Form.Group>
-                            <Button type='submit'>Tìm</Button>
+                            <Button type="submit">Tìm</Button>
                         </Form>
                     </div>
                 </div>
 
-                <Table hover striped className='w-100 m-0 text-center'>
+                <Table hover striped className="w-100 m-0 text-center">
                     <thead>
                         <tr>
                             <th>STT</th>
@@ -200,8 +186,8 @@ const Apartments = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {apartments.length > 0 ? (
-                            apartments.map((apartment, id) => (
+                        {results.length > 0 ? (
+                            results.map((apartment, id) => (
                                 <tr key={id}>
                                     <td>{(currentPage - 0) * size + id + 1}</td>
                                     <td>{apartment.apartment_name}</td>
@@ -211,17 +197,16 @@ const Apartments = () => {
                                     <td>{apartment.status}</td>
                                     <td>{apartment.create_at}</td>
                                     <td>{apartment.update_at}</td>
-                                    <td className='d-flex justify-content-around align-items-center'>
-                                        <Button variant="secondary">
-                                            <FaEye className='pb-1' onClick={() => handleResidentDetails(apartment.apartment_id)} />
+                                    <td className="d-flex justify-content-around align-items-center">
+                                        <Button variant="secondary" onClick={() => handleApartmentDetails(apartment.apartment_id)}>
+                                            <FaEye className="pb-1" />
                                         </Button>
-                                        <Button variant="warning" onClick={() => updateApartmentById(apartment.apartment_id)}>
-                                            <CiEdit className='pb-1' />
+                                        <Button variant="warning">
+                                            <CiEdit className="pb-1" />
                                         </Button>
                                         <Button variant="danger" onClick={() => deleteApartmentById(apartment.apartment_id)}>
-                                            <CiTrash className='pb-1' />
+                                            <CiTrash className="pb-1" />
                                         </Button>
-                                        <Button variant='primary'>Thanh Toán</Button>
                                     </td>
                                 </tr>
                             ))
@@ -230,6 +215,19 @@ const Apartments = () => {
                                 <td colSpan="9">No apartments found</td>
                             </tr>
                         )}
+                   
+
+
+
+
+
+
+
+
+
+                        
+
+
                     </tbody>
                 </Table>
                 <div className="mt-4 pagination d-flex justify-content-center align-items-center">

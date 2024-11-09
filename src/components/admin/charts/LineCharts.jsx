@@ -115,9 +115,10 @@ export default class Example extends PureComponent {
                 <ToastContainer />
                 <h1 className='text-center text-danger'>Tổng Doanh Thu Hàng Tháng</h1>
                 <LineChart
+                className='mx-auto'
                 title='Chi phí'
-                    width={1300}
-                    height={550}
+                    width={1000}
+                    height={500}
                     data={data}
                     margin={{
                         top: 5,

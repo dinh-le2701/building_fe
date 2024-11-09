@@ -1,3 +1,8 @@
-.content-col{
+/* .content-col{
+    
+} */
+
+.col-12.col-lg-10{
+    height: max-content;
     background-color: #b9e0e8;
 }

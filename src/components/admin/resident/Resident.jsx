@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';

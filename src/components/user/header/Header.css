@@ -1,4 +1,16 @@
+.logo p, .logo span{
+    font-size: 30px;
+    color: #000000;
+    margin: 0;
+}
 a{
     text-decoration: none;
+    font-size: 18px;
     color: rgb(92, 92, 91);
+}
+
+.header-login a{
+    padding: 5px 20px;
+    border-radius: 10px;
+    font-size: 20px;
 }

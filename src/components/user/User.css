@@ -1,0 +1,38 @@
+.user{
+    font-size: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    
+}
+
+/* full-service */
+.full-service .container{
+    font-family: 'Courier New', Courier, monospace;
+    border-radius: 15px;
+    padding: 20px;
+    background: #efefef;
+}
+
+.categories .card-img{
+    border-radius: 20px;
+}
+
+.categories .card-img:nth-child(1){
+    background-image: url("https://parentportfolio.com/wp-content/uploads/2022/11/estate.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 400px;
+}
+
+.categories .card-img:nth-child(2){
+    background-image: url("https://media.licdn.com/dms/image/D4D12AQEaLAZT_s7KfQ/article-cover_image-shrink_720_1280/0/1656939664338?e=2147483647&v=beta&t=UpQ_diu_xyow2FkCYcNtrCC1-2NwtSZ7VusR-l41TQo");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 400px;
+}
+
+.categories .card-img:nth-child(3){
+    background-image: url("https://torbitalimited.com/wp-content/uploads/2018/09/real-estate.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 400px;
+}

@@ -11,7 +11,8 @@ const Accounts = () => {
     const [accounts, setAccounts] = useState([]);
     const [account, setNewAccount] = useState({
         email: "",
-        password: ""
+        password: "",
+        role: ""
     });
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const Accounts = () => {
     // get residents api
     const getAccounts = async () => {
         try {
-            const response = await fetch('http://localhost:1999/api/accounts', {
+            const response = await fetch('http://localhost:5000/api/auth/accounts', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ const Accounts = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:1999/auth/signup', {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +55,20 @@ const Accounts = () => {
         });
         const data = await response.json();
         console.log(data); // Hiển thị phản hồi từ API
-        getAccounts()
+        if (data.message === 'Account created successfully') {
+            // Làm trống các ô nhập sau khi đăng ký thành công
+            setNewAccount({
+                username: '',
+                email: '',
+                password: '',
+                role: ''
+            });
+    
+            getAccounts(); // Lấy lại danh sách tài khoản
+            handleClose(); // Đóng form nếu cần
+        }
+        getAccounts();
+        handleClose();
     }
 
     // handle form input change
@@ -69,7 +83,6 @@ const Accounts = () => {
     // handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
-
     };
 
     const handleDelete = async () => {
@@ -104,7 +117,7 @@ const Accounts = () => {
                         <tr>
                             <th>STT</th>
                             <th>Tên Tài Khoản</th>
-                            <th>Quyền</th>
+                            <th>Vai Tr</th>
                             <th className='w-25'>Hành Động</th>
                         </tr>
                     </thead>
@@ -147,6 +160,16 @@ const Accounts = () => {
                                 type="text"
                                 name='password'
                                 value={account.password}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Vài Trò</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name='role'
+                                value={account.role}
                                 onChange={handleChange}
                             />
                         </Form.Group>

@@ -33,14 +33,20 @@ const ResidentDetails = () => {
       style={{ height: '92vh' }}>
       <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
         <h3 className='m-0'>Chi Tiết Cư Dân</h3>
-        <Link className='pe-3' to={"/admin/resident"}>
-          <b>Trở về</b>
-        </Link>
+        <div>
+          <Link className='pe-3' to={"/admin/resident"}>
+            <b>Trở về</b>
+          </Link>
+
+          <Button>Thêm xe</Button>
+        </div>
       </div>
 
       <div className='info bg-white m-3 p-5'>
         <div className=''>
-          <h4 className='text-center'>Thông tin cá nhân</h4>
+          <div>
+            <h4 className='text-center'>Thông tin cá nhân</h4>
+          </div>
           <Container className='w-50'>
             <Table hover responsive className='w-75'>
               <tbody>
