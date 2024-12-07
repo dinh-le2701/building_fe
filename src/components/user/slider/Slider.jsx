@@ -8,16 +8,13 @@ const Slider = () => {
   return (
     <div className='slider my-3'>
       <Container className='text-center'>
-        <div>
-          <h3>Let's find a home <br /> that's perfect for you</h3>
-          <span>Seach confidently with your trusted source of homes for sale or rent</span>
+        <h3>Let's find a home <br /> that's perfect for you</h3>
+        <span>Seach confidently with your trusted source of homes for sale or rent</span>
 
-          <Form.Group className='text-center d-flex justify-content-center align-items-center mt-3'>
-            <Form.Control className='w-50 p-3' placeholder='Enter an address, neighborhood, city, or ZIP code' />
-            <Button>
-              <CiSearch />
-              Search
-            </Button>
+        <div className="fg text-center">
+          <Form.Group className='text-center d-flex justify-content-center align-items-center mt-3 w-100'>
+            <Form.Control className='w-100 p-3' placeholder='Enter an address, neighborhood, city, or ZIP code'></Form.Control>
+            
           </Form.Group>
         </div>
       </Container>

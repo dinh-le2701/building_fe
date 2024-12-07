@@ -9,6 +9,7 @@ import fetchURL from '../../../api/AxiosInstance';
 const StaffDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
   const [staffs, setStaffs] = useState(null);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     fetchResidentDetails();
@@ -16,7 +17,7 @@ const StaffDetail = () => {
 
   const fetchResidentDetails = async () => {
     try {
-      const response = await fetchURL(`http://localhost:8907/api/v1/staff/${id}`);
+      const response = await fetchURL(`http://localhost:8181/api/v1/staff/${id}`);
       setStaffs(response.data);
       console.log(response.data)
     } catch (err) {
@@ -31,19 +32,19 @@ const StaffDetail = () => {
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0]; // Lấy file đã chọn
-  
+
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-  
+
       try {
         // Gửi request để upload ảnh
-        const response = await fetchURL.post(`http://localhost:8907/api/v1/upload/${id}`, formData, {
+        const response = await fetchURL.post(`http://localhost:8181/api/v1/upload/${id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-  
+
         // Cập nhật lại thông tin nhân viên với URL mới
         if (response.data && response.data.staff_img) {
           setStaffs((prevStaff) => ({
@@ -59,13 +60,12 @@ const StaffDetail = () => {
     }
     fetchResidentDetails();
   };
-  
+
 
   return (
-    <div className='resident-details'
-      style={{ height: '92vh' }}>
+    <div className='resident-details' >
       <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
-        <h3 className='m-0'>Chi Tiết Nhân Viên</h3>
+        <h3 className='m-0 fw-bold'>Chi Tiết Nhân Viên</h3>
         <Link className='pe-3' to={"/admin/staff"}>
           <b>Trở về</b>
         </Link>
@@ -73,22 +73,28 @@ const StaffDetail = () => {
 
       <div className='info bg-white m-3 p-5 d-flex justify-content-around '>
         <div className="img">
-          <Form.Control
-            width={"100px"}
-            height={"100px"}
-            type="file"
-            onChange={handleFileUpload}
-          />
-
-          {/* <Form.Control width={"100px"} height={"100px"} type="file" src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg">
-
-          </Form.Control> */}
-          <img
-            alt="Sample"
-            src={staffs.staff_img}
-            width={"300px"}
-            height={"400px"}
-          />
+          {staffs.staff_img ? (
+            <>
+              {/* Hiển thị ảnh khi đã có ảnh */}
+              <img
+                alt="Sample"
+                src={staffs.staff_img}
+                width="300px"
+                height="400px"
+              />
+              {/* Nút chỉnh sửa ảnh */}
+            </>
+          ) : (
+            <>
+              {/* Nút chọn ảnh khi chưa có ảnh */}
+              <Form.Control
+                type="file"
+                width="100px"
+                height="100px"
+                onChange={handleFileUpload}
+              />
+            </>
+          )}
         </div>
 
         <div className="personal-info w-50">
@@ -96,7 +102,7 @@ const StaffDetail = () => {
             <tbody>
               <tr>
                 <th>Họ tên</th>
-                <td>{staffs.staff_name}</td>
+                <td className='w-50'>{staffs.staff_name}</td>
               </tr>
               <tr>
                 <th>Vị trí</th>
@@ -120,19 +126,51 @@ const StaffDetail = () => {
               </tr>
               <tr>
                 <th>Trạng thái:</th>
-                <td>{staffs.status}</td>
+                <td>{staffs.stafStatus}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+
+
+      </div>
+
+      <div className='bg-white m-3 p-5'>
+        <h3 className='fw-bold text-center'>Lịch Làm Việc</h3>
+
+        <div className='work-time'>
+          <Table table bordered striped hover className='text-center'>
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td>Thứ</td>
+                <td>Tổng Thời Gian</td>
+                <td>Thời Gian Cụ Thể</td>
               </tr>
               <tr>
-                <th>Ngày bắt đầu:</th>
-                <td>{staffs.create_date}</td>
+                <td>2</td>
+                <td>8h</td>
+                <td>13:00 tới 18:00</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>8h</td>
+                <td>13:00 tới 18:00</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>8h</td>
+                <td>13:00 tới 18:00</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>8h</td>
+                <td>13:00 tới 18:00</td>
               </tr>
             </tbody>
           </Table>
         </div>
       </div>
-
-
-
     </div>
   );
 };

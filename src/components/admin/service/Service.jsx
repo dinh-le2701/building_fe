@@ -12,47 +12,48 @@ const Service = () => {
                 <h3 className='m-0'>Chi phí dịch vụ</h3>
             </div>
 
-            <div className="table-content bg-white m-3 p-2 d-flex justify-content-between align-items-center">
+            <div className="table-content bg-white m-3 p-4 text-center">
                 <Table hover striped bordered className="text-center">
+                    <thead>
+                        <tr>
+                            <th className='fs-2' colSpan={3}>Bảng Giá Bán Lẻ Điện Cho Sinh Hoạt</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <th className='h4'>Bậc</th>
-                            <th className='h4'>Giá bán lẻ điện (kWh)</th>
+                            <th className='h4'>Số điện / h (kWh)</th>
                             <th className='h4'>Giá điện (đồng / kWh)</th>
                         </tr>
                         <tr>
                             <th>Bậc 1</th>
                             <td>Từ 0 - 50 kWh</td>
-                            <td>1.806</td>
+                            <td>1.893</td>
                         </tr>
                         <tr>
                             <th>Bậc 2</th>
                             <td>Từ 51 - 100 kWh</td>
-                            <td>1.866</td>
+                            <td>1.956</td>
                         </tr>
                         <tr>
                             <th>Bậc 3</th>
                             <td>Từ 101 - 200 kWh</td>
-                            <td>2.167</td>
+                            <td>2.271</td>
                         </tr>
                         <tr>
                             <th>Bậc 4</th>
                             <td>Từ 201 - 300 kWh</td>
-                            <td>2.729</td>
+                            <td>2.860</td>
                         </tr>
                         <tr>
                             <th>Bậc 5</th>
                             <td>Từ 301 - 400 kWh</td>
-                            <td>3.050</td>
+                            <td>3.197</td>
                         </tr>
                         <tr>
                             <th>Bậc 6</th>
                             <td>Từ 401 trở lên kWh</td>
-                            <td>3.151</td>
-                        </tr>
-                        <tr class="text-center">
-                            <th colSpan="2">Dùng công tơ thẻ trả trước</th>
-                            <td colspan="3">2.649</td>
+                            <td>3.302</td>
                         </tr>
 
                         <tr class="text-center">
@@ -77,81 +78,39 @@ const Service = () => {
                     </tbody>
                 </Table>
 
-                {/* <Table striped hover className='w-100 m-0 text-center'>
+                <Table hover striped bordered className="text-center">
                     <thead>
-                        <tr>
-                            <th colSpan={3}>Tiền điện</th>
-                            <th>Giá</th>
-                            <th colSpan={2}>Tiền Phương Tiện</th>
-                            <th>Phí Quản Lý</th>
-                        </tr>
-
+                        <tr><th className='fs-2' colSpan={3}>Bảng Giá Nước Sạch Sinh Hoạt</th></tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>Bậc</th>
-                            <th>Giá bán lẻ điện (kWh)</th>
-                            <th>Giá điện (đồng / kWh)</th>
-                            <th>Giá</th>
-                            <th>Xe máy</th>
-                            <th>Xe ô tô</th>
-                            <th>Giá tiền</th>
+                            <th className='h4'>Mức</th>
+                            <th className='h4 w-50'>Số m<sup>3</sup> tiêu thụ (m<sup>3</sup>)</th>
+                            <th className='h4 w-50'>Giá nước (đồng / m<sup>3</sup>)</th>
                         </tr>
                         <tr>
-                            <th>Bậc 1</th>
-                            <td>Từ 0 - 50 kWh</td>
-                            <td>1.806</td>
-                            <td rowSpan={7} id=''>100000</td>
-                            <td rowSpan={7} id=''>70000</td>
-                            <td rowSpan={7} id=''>100000</td>
-                            <td rowSpan={7} id=''>300000</td>
+                            <td>Mức 1</td>
+                            <td>0 - 10 m<sup>3</sup> đầu tiên</td>
+                            <td>4.500 đồng / m<sup>3</sup></td>
                         </tr>
                         <tr>
-                            <th>Bậc 2</th>
-                            <td>Từ 51 - 100 kWh</td>
-                            <td>1.866</td>
+                            <td>Mức 2</td>
+                            <td>trên mức 10 - 20 m<sup>3</sup></td>
+                            <td>5.600 đồng / m<sup>3</sup></td>
                         </tr>
                         <tr>
-                            <th>Bậc 3</th>
-                            <td>Từ 101 - 200 kWh</td>
-                            <td>2.167</td>
+                            <td>Mức 3</td>
+                            <td>trên mức 20 - 30 m<sup>3</sup></td>
+                            <td>6.700 đồng / m<sup>3</sup></td>
                         </tr>
                         <tr>
-                            <th>Bậc 4</th>
-                            <td>Từ 201 - 300 kWh</td>
-                            <td>2.729</td>
+                            <td>Mức 4</td>
+                            <td> trên mức 30 m<sup>3</sup></td>
+                            <td>9.200 đồng / m<sup>3</sup></td>
                         </tr>
-                        <tr>
-                            <th>Bậc 5</th>
-                            <td>
-                                Từ 301 - 400 kWh</td>
-                            <td>3.050</td>
-                        </tr>
-                        <tr>
-                            <th>Bậc 6</th>
-                            <td>Từ 401 trở lên kWh</td>
-                            <td>3.151</td>
-                        </tr>
-                        <tr>
-                            <th colSpan={2}>Dùng công tơ thẻ trả trước</th>
-                            <td>2.649</td>
-                        </tr>
-                        <tr>
-                            <th colSpan={3}>Tiền Nước</th>
-                            <td>100000</td>
-                        </tr>
-                        <tr>
-                            <th colSpan={3}>Tiền Quản Lý</th>
-                            <td>300000</td>
-                        </tr>
-                        <tr>
-                            <th colSpan={3}>Tiền Xe</th>
-                            <td>100000</td>
-                            <td></td>
-                        </tr>
-
                     </tbody>
-                </Table> */}
+                </Table>
+
             </div>
             <div className='p-3 bg-white m-3'>
                 <Form>

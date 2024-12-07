@@ -4,7 +4,7 @@ import '../User.css'
 
 const Categories = () => {
     return (
-        <div className='categories'>
+        <div className='categories mb-5'>
             <Container className='text-center'>
                 <div className="category-title my-5">
                     <h2 className='fw-bold'>Move to What Moves You</h2>

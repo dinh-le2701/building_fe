@@ -26,7 +26,8 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('http://localhost:8181/api/account/login', {
+        
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -39,8 +40,8 @@ const Login = () => {
       if (!response.ok) {
         // If login fails, show error notification
         Store.addNotification({
-          title: "Login Failed!",
-          message: data.message || "An error occurred while trying to log in.",
+          title: "Đăng nhập thất bại!",
+          message: "Tài khoản đăng nhập không tồn tại.",
           type: "danger", // red color for error
           insert: "top",
           container: "top-left",
@@ -52,8 +53,8 @@ const Login = () => {
 
       } else if (data.role !== "ADMIN"){
         Store.addNotification({
-          title: "Login Failed!",
-          message: "Your account does not have access",
+          title: "Đăng nhập thất bại!",
+          message: "Bạn không có quyền truy cập!",
           type: "warning", // green color for success
           insert: "top",
           container: "top-left",
@@ -62,6 +63,8 @@ const Login = () => {
             onScreen: true
           }
         });
+
+        console.log(data.role)
       }
       
       else {
@@ -71,8 +74,8 @@ const Login = () => {
 
         // Success notification
         Store.addNotification({
-          title: "Login Successful!",
-          message: "Waiting to navigate dashboard",
+          title: "Đăng nhập thành công!",
+          message: "Tự động chuyển trang trong 1s",
           type: "success", // green color for success
           insert: "top",
           container: "top-left",
@@ -90,8 +93,8 @@ const Login = () => {
       console.error("Error during login:", error);
       // Notification for network/server error
       Store.addNotification({
-        title: "Error!",
-        message: "Unable to connect to the server. Please try again later.",
+        title: "Lỗi server!",
+        message: "Không thể kết nối tới server. Vui lòng thử lại sau!.",
         type: "danger",
         insert: "top",
         container: "top-left",

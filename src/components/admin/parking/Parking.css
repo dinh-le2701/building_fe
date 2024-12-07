@@ -1,0 +1,6 @@
+.card:hover{
+    cursor: pointer;
+    background-color: rgb(229, 233, 229);
+    box-shadow: 10px 10px;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}

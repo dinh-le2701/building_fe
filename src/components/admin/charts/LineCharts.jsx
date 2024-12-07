@@ -113,11 +113,11 @@ export default class Example extends PureComponent {
         return (
             <Container>
                 <ToastContainer />
-                <h1 className='text-center text-danger'>Tổng Doanh Thu Hàng Tháng</h1>
+                <h1 className='text-center text-danger'>Thống Kê</h1>
                 <LineChart
-                className='mx-auto'
-                title='Chi phí'
-                    width={1000}
+                    className='mx-auto'
+                    title='Chi phí'
+                    width={900}
                     height={500}
                     data={data}
                     margin={{
@@ -127,12 +127,12 @@ export default class Example extends PureComponent {
                         bottom: 5,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid vertical={true} horizontal={false} strokeDasharray="10" />
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line connectNulls type="monotone" dataKey="uv" stroke="#938569" fill="#8884d8" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="uv" stroke="#82ca9d" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="amt" stroke="#000" activeDot={{ r: 8 }} />
                 </LineChart>

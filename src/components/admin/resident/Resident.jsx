@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { ReactNotifications, Store } from 'react-notifications-component';
 import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
@@ -59,14 +60,24 @@ const Resident = () => {
 
     const fetchResidents = async (page, size) => {
         try {
-            const response = await fetch(`http://localhost:8908/api/v1/resident?page=${page}&size=${size}`);
+            const response = await fetch(`http://localhost:8181/api/v1/resident?page=${page}&size=${size}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch staff data');
             }
             const data = await response.json();
             setResidents(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-            setTotalPages(data.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
+            setTotalPages(data.page.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
             console.log(data);
+            Store.addNotification({
+                title: "Get Resident successfully!",
+                type: "success", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 2000, // Auto-dismiss after 4 seconds
+                    onScreen: true
+                }
+            });
         } catch (error) {
             setError(error.message);
         } finally {
@@ -74,23 +85,23 @@ const Resident = () => {
         }
     };
 
-    // const loadResidents = async (page, size) => {
-    //     try {
-    //         const response = await fetch(`http://localhost:8908/api/v1/resident`);
-            
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch staff data');
-    //         }
-    //         const data = await response.json();
-    //         setResidents(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-    //         setTotalPages(data.totalPages); 
-            
-    //     } catch (error) {
-    //         setError(error.message);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const loadResidents = async (page, size) => {
+        try {
+            const response = await fetch(`http://localhost:8908/api/v1/resident`);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch staff data');
+            }
+            const data = await response.json();
+            setResidents(data.content); // Giả sử dữ liệu được trả về trong `data.content`
+            setTotalPages(data.totalPages);
+
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Handle form submit
     const handleSubmits = (e) => {
@@ -108,7 +119,7 @@ const Resident = () => {
             let response;
             if (isEditing) {
                 // Update existing resident
-                response = await fetch(`http://localhost:8908/api/residents/${currentResidentId}`, {
+                response = await fetch(`http://localhost:8181/api/resident/${currentResidentId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -117,7 +128,7 @@ const Resident = () => {
                 });
             } else {
                 // Create new resident
-                response = await fetch('http://localhost:8908/api/residents', {
+                response = await fetch('http://localhost:8181/api/v1/resident', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -175,14 +186,6 @@ const Resident = () => {
             phone_number: "",
             birthday: "",
             move_in_date: "",
-            vehicles: [
-                {
-                    vehicle_name: "",
-                    license_plate: "",
-                    vehicle_type: "",
-                    color: ""
-                }
-            ]
         });
         setShow(true);
     };
@@ -204,7 +207,7 @@ const Resident = () => {
     // handle delete api
     const deleteResidentById = async (resident_id) => {
         try {
-            const response = await fetch(`http://localhost:8908/api/v1/resident/${resident_id}`, {
+            const response = await fetch(`http://localhost:8181/api/v1/resident/${resident_id}`, {
                 method: 'DELETE',
             });
 
@@ -235,6 +238,7 @@ const Resident = () => {
     return (
         <div className='resident'
             style={{ height: '' }}>
+            <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Cư Dân</h3>
             </div>
@@ -244,6 +248,7 @@ const Resident = () => {
                     <div className="select-group">
                         Hiển thị
                         <select name="" id="" className='mx-2' value={size} onChange={handlePageSizeChange}>
+                            <option value="0">0</option>
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="20">20</option>
@@ -301,16 +306,16 @@ const Resident = () => {
                     </tbody>
                 </Table>
                 <div className="mt-3 pagination d-flex justify-content-center align-items-center">
-                <div className="mt-3 pagination d-flex justify-content-center align-items-center">
-                    <Pagination className=''>
-                        <Pagination.First onClick={() => handlePageChange(0)}/>
-                        <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)}/>
-                        <Pagination.Item>{currentPage + 1} / {totalPages}</Pagination.Item>
-                        {/* <Pagination.Item>{totalPages}</Pagination.Item> */}
-                        <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}/>
-                        <Pagination.Last onClick={() => handlePageChange(totalPages - 1)}/>
-                    </Pagination>
-                </div>
+                    <div className="mt-3 pagination d-flex justify-content-center align-items-center">
+                        <Pagination className=''>
+                            <Pagination.First onClick={() => handlePageChange(0)} />
+                            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} />
+                            <Pagination.Item>{currentPage + 1} / {totalPages}</Pagination.Item>
+                            {/* <Pagination.Item>{totalPages}</Pagination.Item> */}
+                            <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                            <Pagination.Last onClick={() => handlePageChange(totalPages - 1)} />
+                        </Pagination>
+                    </div>
 
 
                 </div>
@@ -373,50 +378,6 @@ const Resident = () => {
                                 type="date"
                                 name='move_in_date'
                                 value={newResident.move_in_date}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Tên Phương Tiện</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name='vehicle_name'
-                                value={newResident.vehicle_name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Biển Số</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name='license_plate'
-                                value={newResident.license_plate}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Loại Phương Tiện</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name='vehicle_type'
-                                value={newResident.vehicle_type}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Màu Sắc</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name='color'
-                                value={newResident.color}
                                 onChange={handleChange}
                                 required
                             />

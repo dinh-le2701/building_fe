@@ -11,6 +11,8 @@ import { MdErrorOutline } from "react-icons/md";
 import { MdOutlinePayment } from "react-icons/md";
 import { MdDesignServices } from "react-icons/md";
 import { IoMdNotifications } from "react-icons/io";
+import { FaParking } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
 
 import './Sidebar.css'
 
@@ -40,72 +42,38 @@ const Sidebar = () => {
                     <Nav className="btn-click me-auto mb-3">
                         <Nav.Link className='w-100 text-center' href="/admin">
                             <Container >
-                                <Image width={"60%"} height={"60%"} src='https://building-management-store-img.s3.amazonaws.com/2128c770dec2679c3ed3.jpg' roundedCircle />
+                                <Image width={"60%"} height={"60%"} src='https://building-management-store-img.s3.us-east-1.amazonaws.com/aa831607197aa324fa6b.jpg' roundedCircle />
                                 <h1>KyotoEstate</h1>
                             </Container>
                         </Nav.Link>
                     </Nav>
 
                 </div>
-                <Container className="p-0 text-dark">
+                <Container className="p-0">
                     {/* Trang chủ */}
                     <Nav className="btn-click me-auto mb-3">
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' href="/admin">
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin">
                             <MdOutlineDashboard className='me-3' />
-                            <span>Trang Chủ</span>
+                            Trạng Chủ
                         </Nav.Link>
-                    </Nav>
-
-                    {/* Cư dân */}
-                    <Nav className="btn-click me-auto flex-column mb-3">
-                        {/* Nút Cư Dân */}
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' onClick={() => toggleMenu('residents')}>
-                            <FaRegUser className='me-3' />
-                            <span>Cư Dân</span>
-                        </Nav.Link>
-
-                        {/* Hiển thị submenu nếu được bật */}
-                        {menu.residents && (
-                            <div style={{ paddingLeft: '20px' }}>
-                                {/* <Link className='no-border form-control d-flex align-items-center text-dark my-3' to="/admin/resident">
-                                    <FaRegUser className='me-3' />
-                                    Cư Dân</Link> */}
-
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/resident">
-                                    <FaRegUser className='me-3' />
-                                    Cư Dân
-                                </Nav.Link>
-                                {/* <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="admin/resident">
-
-                                </Nav.Link> */}
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/vehicle">
-                                    <FaBicycle className='me-3' />
-                                    Phương Tiện
-                                </Nav.Link>
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/contract">
-
-                                    Hợp Đồng
-                                </Nav.Link>
-                            </div>
-                        )}
                     </Nav>
 
                     {/* Căn hộ */}
                     <Nav className="btn-click me-auto flex-column mb-3">
                         {/* Nút Căn Hộ */}
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' onClick={() => toggleMenu('apartments')}>
+                        <Nav.Link className='form-control d-flex align-items-center ' onClick={() => toggleMenu('apartments')}>
                             <MdApartment className='me-3' />
-                            <span>Căn Hộ</span>
+                            Căn Hộ
                         </Nav.Link>
 
                         {/* Hiển thị submenu nếu được bật */}
                         {menu.apartments && (
                             <div style={{ paddingLeft: '20px' }}>
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/apartment">
+                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/apartment">
                                     <MdApartment className='me-3' />
                                     Căn Hộ
                                 </Nav.Link>
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/notification">
+                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/notification">
                                     <IoMdNotifications className='me-3' />
                                     Thông Báo
                                 </Nav.Link>
@@ -113,34 +81,63 @@ const Sidebar = () => {
                         )}
                     </Nav>
 
+
+                    {/* Cư dân */}
+                    <Nav className="btn-click me-auto mb-3">
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/resident">
+                            <FaRegUser className='me-3' />
+                            Cư Dân
+                        </Nav.Link>
+                    </Nav>
+                    
+
+                    {/* Căn hộ */}
+                    <Nav className="btn-click me-auto flex-column my-3">
+                        {/* Nút Căn Hộ */}
+                        <Nav.Link className='form-control d-flex align-items-center ' onClick={() => toggleMenu('vehicle')}>
+                            <FaBicycle className='me-3' />
+                            Phương Tiện
+                        </Nav.Link>
+
+                        {/* Hiển thị submenu nếu được bật */}
+                        {menu.vehicle && (
+                            <div style={{ paddingLeft: '20px' }}>
+                                <Nav.Link className='form-control d-flex align-items-center mt-3' href="/admin/vehicle">
+                                    <FaBicycle className='me-3' />
+                                    Phương Tiện
+                                </Nav.Link>
+                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/parking">
+                                    <FaParking className='me-3' />
+                                    Bãi Giữ Xe
+                                </Nav.Link>
+                            </div>
+                        )}
+                    </Nav>
+
                     {/* Tài khoản */}
                     <Nav className="btn-click me-auto mb-3">
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' href="/admin/account">
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/account">
                             <MdOutlineManageAccounts className='me-3' />
-                            <span>Tài Khoản</span>
+                            Tài khoản
                         </Nav.Link>
                     </Nav>
 
                     {/* Chi phí */}
                     <Nav className="btn-click me-auto flex-column mb-3">
                         {/* Nút Chi phí */}
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' onClick={() => toggleMenu('payment')}>
+                        <Nav.Link className='form-control d-flex align-items-center ' onClick={() => toggleMenu('payment')}>
                             <MdOutlinePayment className='me-3' />
-                            <span>Thanh Toán</span>
+                            Dịch Vụ
                         </Nav.Link>
 
                         {/* Hiển thị submenu nếu được bật */}
                         {menu.payment && (
                             <div style={{ paddingLeft: '20px' }}>
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/payment">
+                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/convenient">
                                     <CiMoneyBill className='me-3' />
-                                    Chi Phí
+                                    Tiện Ích
                                 </Nav.Link>
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/apartment">
-                                    <CiMoneyBill className='me-3' />
-                                    Hoá Đơn
-                                </Nav.Link>
-                                <Nav.Link className='form-control d-flex align-items-center text-dark my-3' href="/admin/services">
+                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/services">
                                     <MdDesignServices className='me-3' />
                                     Dịch Vụ
                                 </Nav.Link>
@@ -149,22 +146,31 @@ const Sidebar = () => {
                     </Nav>
 
                     <Nav className="btn-click me-auto mb-3">
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' href="/admin/staff">
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/staff">
                             <FaUsers className='me-3' />
-                            <span>Nhân Viên</span>
+                            Nhân Viên
                         </Nav.Link>
                     </Nav>
 
                     <Nav className="btn-click me-auto mb-3">
-                        <Nav.Link className='form-control d-flex align-items-center text-dark' href="/admin/error">
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/notification">
                             <MdErrorOutline className='me-3' />
-                            <span>Error Page</span>
+                            Thông Báo
+                        </Nav.Link>
+                    </Nav>
+
+                    <Nav className="btn-click me-auto mb-3">
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/feedback">
+                            <MdErrorOutline className='me-3' />
+                            Phản Hồi
                         </Nav.Link>
                     </Nav>
                 </Container>
-                <div className="logout text-center">
+                <div className="logout text-center mt-5">
                     <Container>
-                        <Button variant='secondary' onClick={handleLogout}>Đăng xuất</Button>
+                        <Button variant='secondary' onClick={handleLogout}>
+                            <span><CiLogout /></span>
+                        </Button>
                     </Container>
                 </div>
             </div>

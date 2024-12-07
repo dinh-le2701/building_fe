@@ -3,39 +3,57 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import fetchURL from '../../../api/AxiosInstance';
 import { Link } from 'react-router-dom'
+import { ReactNotifications, Store } from 'react-notifications-component';
 
 const Vehicle = () => {
 
-    const [residents, setResidents] = useState([]);
-    const [setLoading] = useState(true);
-    const [setError] = useState(null);
+    const [residents, setResidents] = useState([])
 
-    useEffect(() => {
-        // Fetch resident data from your API
-        fetchResident();
-        console.log(residents + "hi")
-    }, []);
 
-    const fetchResident = async () => {
+
+    const getVehiclesByResident = async () => {
         try {
-            const response = await fetchURL('http://localhost:8908/api/v1/resident');
+            const response = await fetch('http://localhost:8181/api/v1/resident');
             const data = await response.json();
-            setResidents(data.content); // Lưu dữ liệu residents vào state
-            setLoading(false);
-            console.log(response.data);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            setResidents(data.content);
+            console.log(residents)
+            Store.addNotification({
+                title: "Lấy dữ liệu phương tiện thành công!",
+                type: "success", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 3000, // Auto-dismiss after 4 seconds
+                    onScreen: true
+                }
+            });
         } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
+            Store.addNotification({
+                title: "Lấy dữ liệu phương tiện thất bại!",
+                type: "danger", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 4000, // Auto-dismiss after 4 seconds
+                    onScreen: true
+                }
+            });
         }
     };
+    useEffect(() => {
+        getVehiclesByResident();
+    }, []);
 
     return (
         <div className='vehicle'
             style={{ height: '92vh' }}>
+            <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Phương Tiện</h3>
-                <Link className='pe-3' to={"/resident"}>
+                <Link className='pe-3' to={"/admin"}>
                     <b>Trở về</b>
                 </Link>
             </div>
@@ -57,31 +75,32 @@ const Vehicle = () => {
                 <Table hover striped className='w-100 m-0 text-center'>
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên Phương Tiện</th>
+                            <th>Tên Chủ Sở Hữu</th>
+                            <th>Tên Xe</th>
                             <th>Biển Số Xe</th>
                             <th>Loại Xe</th>
                             <th>Màu Sắc</th>
-                            <th>Người Sở Hữu</th>
+                            <th>Vị Trí Đỗ Xe</th>
                         </tr>
                     </thead>
                     <tbody>
                         {residents.length > 0 ? (
-                            residents.map((resident, residentIndex) => (
-                                residents.vehicles.map((vehicle, vehicleIndex) => (
-                                    <tr key={vehicle.vehicle_id}>
-                                        <td>{residentIndex + 1}</td>
+                            residents.map((resident, index) => {
+                                // Lặp qua tất cả các xe của mỗi cư dân
+                                return resident.vehicles.map((vehicle, vehicleIndex) => (
+                                    <tr key={index}>
+                                        {/* STT, tên cư dân chỉ hiển thị 1 lần cho mỗi cư dân */}
+                                        <td>{resident.resident_name}</td>
                                         <td>{vehicle.vehicle_name}</td>
                                         <td>{vehicle.license_plate}</td>
                                         <td>{vehicle.vehicle_type}</td>
                                         <td>{vehicle.color}</td>
-                                        <td>{resident.resident_name}</td>
                                     </tr>
-                                ))
-                            ))
+                                ));
+                            })
                         ) : (
-                            <tr>
-                                <td colSpan="6" className="text-center">Không có dữ liệu phương tiện</td>
+                            <tr className='text-center'>
+                                <td colSpan="6">Không có cư dân nào</td>
                             </tr>
                         )}
                     </tbody>

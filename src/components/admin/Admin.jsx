@@ -14,6 +14,8 @@ import StaffDetail from './staff/StaffDetail'
 import Service from './service/Service'
 import ApartmentDetails from './apartments/ApartmentDetails'
 import ResidentDetails from './resident/ResidentDetails'
+import Feedback from './feedback/Feedback'
+import Parking from './parking/Parking'
 
 const Admin = () => {
   return (
@@ -34,6 +36,7 @@ const Admin = () => {
             <Route path='/resident/:id' element={<ResidentDetails />} />
 
             <Route path='/vehicle' element={<Vehicle />} />
+            <Route path='/parking' element={<Parking />} />
             <Route path='/apartment' element={<Apartments />} />
             <Route path='/apartment/:id' element={<ApartmentDetails/>}/>
 
@@ -43,6 +46,7 @@ const Admin = () => {
             <Route path='/staff' element={<Staff />} />
             <Route path='/staff/:id' element={<StaffDetail/>}/>
             <Route path='/notification' element={<Notification />} />
+            <Route path='/feedback' element={<Feedback/>}/>
           </Routes>
         </Col>
       </Row>

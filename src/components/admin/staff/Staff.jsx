@@ -43,7 +43,7 @@ const Staff = () => {
     };
     const handleResidentSubmit = async (apartmentData) => {
         try {
-            const response = await fetch('http://localhost:8907/api/v1/staff', {
+            const response = await fetch('http://localhost:8181/api/v1/staff', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,7 +56,6 @@ const Staff = () => {
                 console.log('Resident created successfully', data);
                 setStaffs([...staffs, data]); // Add the new resident to the list
                 handleClose(); // Close the modal after successful creation
-                getAllStaff();
 
 
                 Store.addNotification({
@@ -69,6 +68,7 @@ const Staff = () => {
                         onScreen: true
                     }
                 });
+                getAllStaff(currentPage, size);
             } else {
                 console.error('Failed to create resident:', data.message);
             }
@@ -92,28 +92,28 @@ const Staff = () => {
     // Hàm gọi API với phân trang
     const getAllStaff = async (page, size) => {
         try {
-            const response = await fetch(`http://localhost:8907/api/v1/staff?page=${page}&size=${size}`);
+            const response = await fetch(`http://localhost:8181/api/v1/staff?page=${page}&size=${size}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch staff data');
             }
             const data = await response.json();
             setStaffs(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-            setTotalPages(data.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
+            setTotalPages(data.page.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
+            console.log(data)
+            console.log(data.page.totalPages)
             Store.addNotification({
                 title: "Get all staff Successful!",
-                message: "Waiting to navigate dashboard",
                 type: "success", // green color for success
                 insert: "top",
                 container: "top-left",
                 dismiss: {
-                  duration: 2000, // Auto-dismiss after 4 seconds
-                  onScreen: true
+                    duration: 2000, // Auto-dismiss after 4 seconds
+                    onScreen: true
                 }
-              });
-      
-              setTimeout(() => {
-              }, 2000);
-            
+            });
+            setTimeout(() => {
+            }, 2000);
+
         } catch (error) {
             setError(error.message);
         } finally {
@@ -142,7 +142,7 @@ const Staff = () => {
     //               onScreen: true
     //             }
     //           });
-      
+
     //           setTimeout(() => {
     //           }, 2000);
     //     } catch (error) {
@@ -178,7 +178,7 @@ const Staff = () => {
 
     const deleteStaffById = async (id) => {
         try {
-            const response = await fetch(`http://localhost:8907/api/v1/staff/${id}`, {
+            const response = await fetch(`http://localhost:8181/api/v1/staff/${id}`, {
                 method: 'DELETE',
             });
 
@@ -191,13 +191,13 @@ const Staff = () => {
                     insert: "top",
                     container: "top-left",
                     dismiss: {
-                      duration: 2000, // Auto-dismiss after 4 seconds
-                      onScreen: true
+                        duration: 2000, // Auto-dismiss after 4 seconds
+                        onScreen: true
                     }
-                  });
-          
-                  setTimeout(() => {
-                  }, 2000);
+                });
+
+                setTimeout(() => {
+                }, 2000);
             } else {
                 const errorData = await response.json();
                 console.error('Failed to delete staff:', errorData.message);
@@ -208,7 +208,7 @@ const Staff = () => {
     }
 
     return (
-        
+
         <div className='staff'>
             <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
@@ -243,6 +243,7 @@ const Staff = () => {
                         <tr>
                             <th>STT</th>
                             <th>Tên Nhân Viên</th>
+                            <th>Mã Nhân Viên</th>
                             <th>Email</th>
                             <th>Số Điện Thoại</th>
                             <th>Ngày Sinh</th>
@@ -251,34 +252,38 @@ const Staff = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? (
-                            <tr><td colSpan="8">Loading...</td></tr>
-                        ) : error ? (
-                            <tr><td colSpan="8">Error: {error}</td></tr>
-                        ) : staffs.length > 0 ? (
+                        {loading && (
+                            <tr>
+                                <td colSpan="8">Loading...</td>
+                            </tr>
+                        )}
+                        {!loading && error && (
+                            <tr>
+                                <td colSpan="8">Error: {error}</td>
+                            </tr>
+                        )}
+                        {!loading && !error && staffs.length > 0 && (
                             staffs.map((staff, index) => (
                                 <tr key={index}>
-                                    <td>{(currentPage - 0) * size + index + 1}</td> {/* Tính STT dựa trên trang hiện tại */}
+                                    <td>{(currentPage - 0) * size + index + 1}</td>
                                     <td>{staff.staff_name}</td>
+                                    <td>{staff.staff_code}</td>
                                     <td>{staff.email}</td>
                                     <td>{staff.phone}</td>
                                     <td>{staff.birthday}</td>
                                     <td>{staff.work_time}</td>
-                                    <td className='d-flex justify-content-around align-items-center'>
+                                    <td className="d-flex justify-content-around align-items-center">
                                         <Button variant="secondary">
-                                            <FaEye className='pb-1'
+                                            <FaEye
+                                                className="pb-1"
                                                 onClick={() => handleResidentDetails(staff.staff_id)}
                                             />
                                         </Button>
-                                        <Button variant="warning"
-                                        //onClick={() => updateApartmentById(apartment.apartment_id)}
-                                        >
-                                            <CiEdit className='pb-1' />
+                                        <Button variant="warning">
+                                            <CiEdit className="pb-1" />
                                         </Button>
-                                        <Button variant="danger"
-                                            onClick={() => deleteStaffById(staff.staff_id)}
-                                        >
-                                            <CiTrash className='pb-1' />
+                                        <Button variant="danger" onClick={() => deleteStaffById(staff.staff_id)}>
+                                            <CiTrash className="pb-1" />
                                         </Button>
                                         <Button>
                                             <MdDateRange />
@@ -286,12 +291,14 @@ const Staff = () => {
                                     </td>
                                 </tr>
                             ))
-                        ) : (
+                        )}
+                        {!loading && !error && staffs.length === 0 && (
                             <tr>
                                 <td colSpan="8" className="text-center">No staff data available</td>
                             </tr>
                         )}
                     </tbody>
+
                 </Table>
                 <div className="mt-3 pagination d-flex justify-content-center align-items-center">
                     <Pagination className=''>
@@ -326,19 +333,16 @@ const Staff = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Hình Ảnh</Form.Label>
-                            <Form.Control type='file' />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
                             <Form.Label>Vị Trí Làm Việc</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name='staff_position'
+                            <Form.Select
+                                name="staff_position"
                                 value={newStaff.staff_position}
                                 onChange={handleChange}
-                                required
-                            />
+                            >
+                                <option value="NHÂN VIÊN KỸ THUẬT">NHÂN VIÊN KỸ THUẬT</option>
+                                <option value="NHÂN VIÊN VỆ SINH">NHÂN VIÊN VỆ SINH</option>
+                                <option value="NHÂN VIÊN BẢO VỆ">NHÂN VIÊN BẢO VỆ</option>
+                            </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
