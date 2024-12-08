@@ -18,9 +18,28 @@ const ApartmentDetails = () => {
         resident_name: "",
         email: "",
         cccd: "",
+        sex: "",
         phone_number: "",
         birthday: ""
     });
+    const initialResidentState = {
+        resident_name: '',
+        email: '',
+        phone_number: '',
+        cccd: '',
+        sex: '',
+        birthday: '',
+    };
+    const newErrors = [];
+    if (!/^0[0-9]{9}$/.test(newResident.phone_number)) {
+        newErrors.push('Số điện thoại phải bắt đầu bằng 0 và theo sau là 9 số.');
+    }
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(newResident.email)) {
+        newErrors.push('Email phải đúng định dạng: @gmail.com.');
+    }
+    if (!/^\d{12}$/.test(newResident.cccd)) {
+        newErrors.push('Số CCCD phải gồm đúng 12 chữ số.');
+    }
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
     const fetchApartmentDetails = async () => {
@@ -41,7 +60,7 @@ const ApartmentDetails = () => {
                 insert: "top",
                 container: "top-left",
                 dismiss: {
-                    duration: 4000, // Auto-dismiss after 4 seconds
+                    duration: 1000, // Auto-dismiss after 4 seconds
                     onScreen: true
                 }
             });
@@ -77,14 +96,7 @@ const ApartmentDetails = () => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Resident created successfully', data);
-                handleClose(); // Close the modal after successful creation
-                // setNewResident({
-                //     resident_name: "",
-                //     email: "",
-                //     cccd: "",
-                //     phone_number: "",
-                //     birthday: ""
-                // })
+                handleClose();
                 fetchApartmentDetails();
                 Store.addNotification({
                     title: "Thêm mới cư dân thành công",
@@ -92,7 +104,20 @@ const ApartmentDetails = () => {
                     insert: "top",
                     container: "top-left",
                     dismiss: {
-                        duration: 4000, // Auto-dismiss after 4 seconds
+                        duration: 2000, // Auto-dismiss after 4 seconds
+                        onScreen: true
+                    }
+                });
+                setNewResident(initialResidentState)
+            } else {
+                Store.addNotification({
+                    title: "Thêm cư dân lỗi",
+                    message: newErrors.join("\n"),
+                    type: "warning", // green color for success
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                        duration: 5000, // Auto-dismiss after 4 seconds
                         onScreen: true
                     }
                 });
@@ -105,7 +130,7 @@ const ApartmentDetails = () => {
                 insert: "top",
                 container: "top-left",
                 dismiss: {
-                    duration: 4000, // Auto-dismiss after 4 seconds
+                    duration: 2000, // Auto-dismiss after 4 seconds
                     onScreen: true
                 }
             });
@@ -153,9 +178,9 @@ const ApartmentDetails = () => {
     };
 
     // http://localhost:8181/api/account/{accountId}/delete-from-apartment/{apartmentId}
-
     const handleDeleteAccount = async (accountId, apartmentId) => {
-        const url = `http://localhost:8181/api/account/{accountId}/delete-from-apartment/{id}`;
+        // Thay thế {accountId} và {apartmentId} trong URL bằng giá trị thực
+        const url = `http://localhost:8181/api/account/${accountId}/delete-from-apartment/${apartmentId}`;
         const confirmDelete = window.confirm("Bạn có chắc muốn xóa tài khoản này không?");
 
         if (!confirmDelete) return; // Người dùng không xác nhận
@@ -166,48 +191,39 @@ const ApartmentDetails = () => {
             });
 
             if (response.ok) {
+                // Hiển thị thông báo thành công
                 Store.addNotification({
-                    title: "Xoá tài khoản thành công!",
-                    type: "success", // green color for success
+                    title: "Xóa tài khoản thành công!",
+                    type: "success",
                     insert: "top",
                     container: "top-left",
                     dismiss: {
-                        duration: 4000, // Auto-dismiss after 4 seconds
-                        onScreen: true
-                    }
+                        duration: 4000, // Auto-dismiss sau 4 giây
+                        onScreen: true,
+                    },
                 });
-                fetchApartmentDetails();
+                fetchApartmentDetails(); // Gọi lại hàm để load dữ liệu mới
             } else {
-                const errorMessage = await response.text();
-                // Store.addNotification({
-                //     title: "Xoá tài khoản thất bại!",
-                //     message: errorMessage,
-                //     type: "danger", // green color for success
-                //     insert: "top",
-                //     container: "top-left",
-                //     dismiss: {
-                //         duration: 4000, // Auto-dismiss after 4 seconds
-                //         onScreen: true
-                //     }
-                // });
-                console.log(accountId)
+                const errorData = await response.json();
+                console.error("Lỗi khi xóa tài khoản:", errorData);
+                alert("Đã xảy ra lỗi khi xóa tài khoản.");
             }
         } catch (error) {
             console.error("Đã xảy ra lỗi:", error);
-            alert("Đã xảy ra lỗi khi xóa tài khoản.");
             Store.addNotification({
-                title: "Xoá tài khoản thành công!",
-                message: error,
-                type: "danger", // green color for success
+                title: "Xóa tài khoản thất bại!",
+                message: "Đã xảy ra lỗi khi kết nối với server.",
+                type: "danger",
                 insert: "top",
                 container: "top-left",
                 dismiss: {
-                    duration: 4000, // Auto-dismiss after 4 seconds
-                    onScreen: true
-                }
+                    duration: 4000,
+                    onScreen: true,
+                },
             });
         }
     };
+
 
     return (
         <div className='resident-details'>
@@ -233,7 +249,7 @@ const ApartmentDetails = () => {
                             </tr>
                             <tr>
                                 <th>Diện Tích:</th>
-                                <td>{apartments.area} m2</td>
+                                <td>{apartments.area} m<sup>2</sup></td>
                             </tr>
                             <tr>
                                 <th>Số Phòng:</th>
@@ -262,6 +278,7 @@ const ApartmentDetails = () => {
                             <th>STT</th>
                             <th>Tên Phòng</th>
                             <th>Tên Người Dân</th>
+                            <th>Giới Tính</th>
                             <th>Số ĐT</th>
                             <th>Email</th>
                             <th>Ngày Nhận Phòng</th>
@@ -275,6 +292,7 @@ const ApartmentDetails = () => {
                                     <td>{id + 1}</td>
                                     <td>{apartments.apartment_name}</td>
                                     <td>{resident.resident_name}</td>
+                                    <td>{resident.sex}</td>
                                     <td>{resident.phone_number}</td>
                                     <td>{resident.email}</td>
                                     <td>{resident.move_in_date}</td>
@@ -318,8 +336,14 @@ const ApartmentDetails = () => {
                                     <td>{account.role}</td>
                                     <td>{account.status}</td>
                                     <td>
-                                        <Button variant="danger" onClick={() => handleDeleteAccount(account.accountId)}>Xóa</Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
+                                        >
+                                            Xóa
+                                        </Button>
                                     </td>
+
                                 </tr>
                             ))
                         ) : (
@@ -327,6 +351,46 @@ const ApartmentDetails = () => {
                                 <td colSpan="5">No accounts available</td>
                             </tr>
                         )}
+                    </tbody>
+                </Table>
+            </div>
+
+            {/* Thông tin dịch vụ sử dụng cho căn hộ */}
+            <div className="apartment-resident-details bg-white m-3 p-3">
+                <h4 className="text-center">Thông tin dịch vụ sử dụng</h4>
+
+                <Table className='w-100 text-center' hover responsive>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên Dịch Vụ</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {/* {apartments && apartments.accounts && apartments.accounts.length > 0 ? (
+                            apartments.accounts.map((account) => (
+                                <tr key={account.id}>
+                                    <td>{account.id}</td>
+                                    <td>{account.email}</td>
+                                    <td>{account.status}</td>
+                                    <td>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
+                                        >
+                                            Xóa
+                                        </Button>
+                                    </td>
+
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5">No accounts available</td>
+                            </tr>
+                        )} */}
                     </tbody>
                 </Table>
             </div>
@@ -355,6 +419,8 @@ const ApartmentDetails = () => {
                                 name='email'
                                 value={newResident.email}
                                 onChange={handleChange}
+                                pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                                title="Email phải có dạng @gmail.com"
                             />
                         </Form.Group>
 
@@ -365,6 +431,8 @@ const ApartmentDetails = () => {
                                 name='phone_number'
                                 value={newResident.phone_number}
                                 onChange={handleChange}
+                                pattern="^0[0-9]{9}$"
+                                title="Số điện thoại phải là 10 số và bắt đầu bằng 0"
                             />
                         </Form.Group>
 
@@ -375,7 +443,22 @@ const ApartmentDetails = () => {
                                 name='cccd'
                                 value={newResident.cccd}
                                 onChange={handleChange}
+                                pattern="^\d{12}$"
+                                title="Số CCCD phải gồm đúng 12 chữ số"
                             />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Giới Tính</Form.Label>
+                            <Form.Select
+                                name="sex"
+                                value={newResident.sex}
+                                onChange={handleChange}
+                            >
+                                <option>Chọn Giới Tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mb-3">

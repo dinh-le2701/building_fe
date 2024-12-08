@@ -106,38 +106,6 @@ const Apartments = () => {
         }
     };
 
-    // const fetchAccountDetails = async (account_id) => {
-    //     try {
-    //         const response = await fetch(`http://localhost:8181/api/account/${account_id}/details`); // Thực hiện lấy danh sách căn hộ
-    //         if (!response.ok) {
-
-    //             throw new Error('Failed to fetch apartment data');
-    //         }
-    //         const data = await response.json();
-    //         setApartments(data.content); // Lưu dữ liệu căn hộ
-    //         console.log(data)
-    //         setTotalPages(data.page.totalPages); // Lưu tổng số trang
-    //         setResults(data.content);  // Cập nhật results với toàn bộ căn hộ ban đầu
-    //         handlePageChange()
-    //         Store.addNotification({
-    //             title: "Get Apartment successfully!",
-    //             type: "success", // green color for success
-    //             insert: "top",
-    //             container: "top-left",
-    //             dismiss: {
-    //                 duration: 2000, // Auto-dismiss after 4 seconds
-    //                 onScreen: true
-    //             }
-    //         });
-    //         setTimeout(() => {
-    //         }, 2000);
-    //     } catch (error) {
-    //         setError(error.message);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
     useEffect(() => {
         fetchApartments(currentPage, size);
     }, [currentPage, size]);
@@ -305,9 +273,6 @@ const Apartments = () => {
                                             {/* <CiEdit className="pb-1" onClick={() => handleUpdate(apartment.apartment_id)} /> */}
                                             <CiEdit className="pb-1" onClick={() => handleUpdateShow(apartment)} />
                                         </Button>
-                                        {/* <Button variant="danger" onClick={() => deleteApartmentById(apartment.apartment_id)}>
-                                            <CiTrash className="pb-1" />
-                                        </Button> */}
                                     </td>
                                 </tr>
                             ))
@@ -372,10 +337,14 @@ const Apartments = () => {
                             <Form.Label>Trạng Thái</Form.Label>
                             <Form.Select
                                 name="apartmentStatus"
-                                value={newApartment.apartment_status}
+                                value={newApartment.apartment_status || "DEFAULT"}
                                 onChange={handleChange}
                             >
-                                <option>Chọn Trạng Thái Phòng</option>
+                                {!newApartment.apartment_status && (
+                                    <option value="DEFAULT" disabled hidden>
+                                        Chọn Trạng Thái Phòng
+                                    </option>
+                                )}
                                 <option value="TRỐNG">TRỐNG</option>
                                 <option value="ĐANG SỬ DỤNG">ĐANG SỬ DỤNG</option>
                                 <option value="ĐANG SỬA CHỮA">ĐANG SỬA CHỮA</option>

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
 import 'react-notifications-component/dist/theme.css';
 import { ReactNotifications, Store } from 'react-notifications-component';
+import { FaAddressBook } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+
 
 
 const Accounts = () => {
@@ -197,6 +200,7 @@ const Accounts = () => {
                             <th>STT</th>
                             <th className='w-25'>Tên Tài Khoản</th>
                             <th className='w-25'>Vai Trò</th>
+                            <th className='w-25'>Ngày Tạo</th>
                             <th className='w-25'>Hành Động</th>
                         </tr>
                     </thead>
@@ -206,7 +210,8 @@ const Accounts = () => {
                                 <td>{id + 1}</td>
                                 <td>{account.email}</td>
                                 <td>{account.role}</td>
-                                <td className=''>
+                                <td>{account.create_date}</td>
+                                <td className='d-flex justify-content-evenly'>
                                     <Button
                                         variant="primary"
                                         onClick={() => {
@@ -214,9 +219,11 @@ const Accounts = () => {
                                             setShowModal(true);
                                         }}
                                     >
-                                        Thêm vào căn hộ
+                                        <FaAddressBook />
                                     </Button>
-                                    <Button variant="danger" type="submit" onClick={() => handleDelete(id)}>Xoá tài khoản</Button>
+                                    <Button variant="danger" type="submit" onClick={() => handleDelete(account.id)}>
+                                        <MdDeleteForever />
+                                    </Button>
                                 </td>
                             </tr>
                         ))}
@@ -298,20 +305,6 @@ const Accounts = () => {
                         ) : (
                             <option disabled>No apartments found</option>
                         )}
-                        {/* {apartments.map((apartment) => (
-                            <option key={apartment.id} value={apartment.id}>
-                                {apartment.name}
-                            </option>
-                            <tr key={index}>
-                                    <td>{apartment.apartment_name}</td>
-                                    <td>{apartment.area} m<sup>2</sup></td>
-                                    <td>{apartment.number_of_room}</td>
-                                    <td>{apartment.apartmentStatus}</td>
-                                    <td>{apartment.create_at}</td>
-                                    <td>{apartment.update_at}</td>
-                                    
-                                </tr>
-                        ))} */}
                     </select>
                 </Modal.Body>
                 <Modal.Footer>

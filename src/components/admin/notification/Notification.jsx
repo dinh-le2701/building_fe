@@ -112,6 +112,23 @@ const Notification = () => {
     }
   };
 
+  const handleSelectAll = (isChecked) => {
+    if (isChecked) {
+      // Nếu checkbox "chọn tất cả" được tích, chọn tất cả các căn hộ
+      setSelectedApartments(tableData);
+      const allEmails = tableData.flatMap((apt) =>
+        apt.emails ? apt.emails.split(", ") : []
+      );
+      setEmailList(allEmails.join(", "));
+    } else {
+      // Nếu checkbox "chọn tất cả" bị bỏ tích, bỏ chọn tất cả
+      setSelectedApartments([]);
+      setEmailList("");
+    }
+  };
+
+
+
   // Xử lý thay đổi khi checkbox được chọn
   const handleCheckboxChange = (apartmentName, emails) => {
     setSelectedApartments((prev) => {
@@ -194,8 +211,8 @@ const Notification = () => {
             />
           </Form.Group>
 
-          <Form.Group>
-            <Button type="submit" className="bg-primary text-white">
+          <Form.Group className='text-center'>
+            <Button type="submit" className="text-center bg-primary text-white w-25">
               Gửi
             </Button>
           </Form.Group>
@@ -206,7 +223,13 @@ const Notification = () => {
         <Table striped hover bordered className="m-0 w-100 text-center">
           <thead>
             <tr>
-              <th>Chọn</th>
+              <th className='d-flex justify-content-center align-items-center'>Chọn Tất Cả
+                <Form.Check
+                className='ms-1'
+                  type="checkbox"
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                />
+              </th>
               <th>Tên Căn Hộ</th>
               <th>Tài Khoản</th>
             </tr>

@@ -190,7 +190,7 @@ const ResidentDetails = () => {
                 <option>Chọn Loại Xe</option>
                 <option value="Xe Máy">Xe Máy</option>
                 <option value="Xe Hơi">Xe Hơi</option>
-                <option value="Xe Đạp">Xe Đạp</option>
+                <option value="Xe Đạp Điện">Xe Đạp Điện</option>
               </Form.Select>
             </Form.Group>
 
