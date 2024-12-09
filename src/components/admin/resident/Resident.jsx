@@ -69,7 +69,7 @@ const Resident = () => {
             setTotalPages(data.page.totalPages); // Giả sử dữ liệu tổng số trang là `data.totalPages`
             console.log(data);
             Store.addNotification({
-                title: "Get Resident successfully!",
+                title: "Thông tin toàn bộ cư dân!",
                 type: "success", // green color for success
                 insert: "top",
                 container: "top-left",

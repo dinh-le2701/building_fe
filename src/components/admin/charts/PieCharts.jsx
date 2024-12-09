@@ -6,14 +6,11 @@ import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const PieCharts = () => {
-    const [apartment, setApartments] = useState([])
+    const [equipement, setEquipements] = useState([])
     const [data, setData] = useState([])
     const [error, setError] = useState([])
     const [loading, setLoading] = useState([])
 
-    const data01 = [
-        { name: 'Group B', value: data }
-    ];
 
     const data02 = [
         { name: 'Số căn phòng trống', value: 100 },
@@ -21,34 +18,56 @@ const PieCharts = () => {
         { name: 'Số căn phòng đang sửa chữa', value: 100 },
     ];
 
-    const fetchApartments = async (page, size) => {
+    const fetchEquipments = async () => {
         try {
-            const response = await fetch(`http://localhost:8181/api/v1/apartment`); // Thực hiện lấy danh sách căn hộ
+            setLoading(true); // Bắt đầu loading
+            const response = await fetch(`http://localhost:8181/api/fire-safety-equipment/status-summary`);
             if (!response.ok) {
-
                 throw new Error('Failed to fetch apartment data');
             }
+
             const data = await response.json();
-            setApartments(data.content); // Lưu dữ liệu căn hộ
-            setData(data.page.totalElements)
-            console.log("Data: ", data.page.totalElements)
+
+            // Giả sử API trả về các trường: vacantCount, inUseCount, repairCount
+            const formattedData = [
+                { name: 'Thiết bị đang hoạt động', value: data.ACTIVE },
+                { name: 'Thiết bị đang bảo trì', value: data.MAINTENANCE },
+                { name: 'Thiết bị không hoạt động', value: data.INACTIVE },
+            ];
+
+            setData(formattedData); // Lưu dữ liệu vào state `data`
+            console.log(formattedData); // Kiểm tra dữ liệu trên console
         } catch (error) {
             setError(error.message);
         } finally {
-            setLoading(false);
+            setLoading(false); // Kết thúc loading
         }
     };
 
+
     useEffect(() => {
-        fetchApartments();
+        fetchEquipments();
     }, []);
     return (
         <div>
-            <PieChart width={300} height={300} className=' d-flex justify-content-between'>
-                <Pie data={data01} dataKey="value" cx="50%" cy="50%" innerRadius={90} />
-            7<Pie data={data02} dataKey="value" cx="50%" cy="50%" innerRadius={50} outerRadius={70} fill="#42cbf5" label />
+            <PieChart width={300} height={300}>
+                <Pie
+                    dataKey="value"
+                    startAngle={180}
+                    endAngle={0}
+                    data={data}
+                    cx="50%"
+                    cy="65%"
+                    outerRadius={80}
+                    fill="#64bfd2"
+                    label
+                />
                 <Tooltip />
             </PieChart>
+            {/* <PieChart width={300} height={300} className=' d-flex justify-content-between'>
+                <Pie data={data} dataKey="value" cx="50%" cy="50%" innerRadius={50} outerRadius={70} fill="#42cbf5" label />
+                <Tooltip />
+            </PieChart> */}
         </div>
     )
 }

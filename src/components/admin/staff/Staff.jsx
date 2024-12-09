@@ -339,6 +339,7 @@ const Staff = () => {
                                 value={newStaff.staff_position}
                                 onChange={handleChange}
                             >
+                                <option value="NHÂN VIÊN LỄ TÂN">NHÂN VIÊN LỄ TÂN</option>
                                 <option value="NHÂN VIÊN KỸ THUẬT">NHÂN VIÊN KỸ THUẬT</option>
                                 <option value="NHÂN VIÊN VỆ SINH">NHÂN VIÊN VỆ SINH</option>
                                 <option value="NHÂN VIÊN BẢO VỆ">NHÂN VIÊN BẢO VỆ</option>

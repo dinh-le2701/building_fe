@@ -16,6 +16,8 @@ import ApartmentDetails from './apartments/ApartmentDetails'
 import ResidentDetails from './resident/ResidentDetails'
 import Feedback from './feedback/Feedback'
 import Parking from './parking/Parking'
+import ResidentCard from './card/ResidentCard'
+import FireSafe from './fire_safe/FireSafe'
 
 const Admin = () => {
   return (
@@ -34,19 +36,19 @@ const Admin = () => {
 
             <Route path='/resident' element={<Resident />} />
             <Route path='/resident/:id' element={<ResidentDetails />} />
-
+            <Route path='/card' element={<ResidentCard />} />
             <Route path='/vehicle' element={<Vehicle />} />
             <Route path='/parking' element={<Parking />} />
             <Route path='/apartment' element={<Apartments />} />
-            <Route path='/apartment/:id' element={<ApartmentDetails/>}/>
+            <Route path='/apartment/:id' element={<ApartmentDetails />} />
 
             <Route path='/services' element={<Service />} />
-
+            <Route path='/fire_safe' element={<FireSafe />} />
             <Route path='/account' element={<Accounts />} />
             <Route path='/staff' element={<Staff />} />
-            <Route path='/staff/:id' element={<StaffDetail/>}/>
+            <Route path='/staff/:id' element={<StaffDetail />} />
             <Route path='/notification' element={<Notification />} />
-            <Route path='/feedback' element={<Feedback/>}/>
+            <Route path='/feedback' element={<Feedback />} />
           </Routes>
         </Col>
       </Row>

@@ -13,6 +13,10 @@ import { MdDesignServices } from "react-icons/md";
 import { IoMdNotifications } from "react-icons/io";
 import { FaParking } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
+import { FaAddressCard } from "react-icons/fa";
+import { FaFireExtinguisher } from "react-icons/fa";
+
+
 
 import './Sidebar.css'
 
@@ -81,17 +85,31 @@ const Sidebar = () => {
                         )}
                     </Nav>
 
-
                     {/* Cư dân */}
-                    <Nav className="btn-click me-auto mb-3">
-                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/resident">
+                    <Nav className="btn-click me-auto flex-column my-3">
+                        {/* Nút Căn Hộ */}
+                        <Nav.Link className='form-control d-flex align-items-center ' onClick={() => toggleMenu('resident')}>
                             <FaRegUser className='me-3' />
                             Cư Dân
                         </Nav.Link>
-                    </Nav>
-                    
 
-                    {/* Căn hộ */}
+                        {/* Hiển thị submenu nếu được bật */}
+                        {menu.resident && (
+                            <div style={{ paddingLeft: '20px' }}>
+                                <Nav.Link className='form-control d-flex align-items-center mt-3' href="/admin/resident">
+                                    <FaRegUser className='me-3' />
+                                    Cư Dân
+                                </Nav.Link>
+                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/card">
+                                    <FaAddressCard  className='me-3' />
+                                    Thẻ
+                                </Nav.Link>
+                            </div>
+                        )}
+                    </Nav>
+
+
+                    {/* Phương tiện */}
                     <Nav className="btn-click me-auto flex-column my-3">
                         {/* Nút Căn Hộ */}
                         <Nav.Link className='form-control d-flex align-items-center ' onClick={() => toggleMenu('vehicle')}>
@@ -153,9 +171,9 @@ const Sidebar = () => {
                     </Nav>
 
                     <Nav className="btn-click me-auto mb-3">
-                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/notification">
-                            <MdErrorOutline className='me-3' />
-                            Thông Báo
+                        <Nav.Link className='form-control d-flex align-items-center ' href="/admin/fire_safe">
+                            <FaFireExtinguisher className='me-3' />
+                            PCCC
                         </Nav.Link>
                     </Nav>
 

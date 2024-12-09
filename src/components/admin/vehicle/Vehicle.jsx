@@ -95,6 +95,7 @@ const Vehicle = () => {
                                         <td>{vehicle.license_plate}</td>
                                         <td>{vehicle.vehicle_type}</td>
                                         <td>{vehicle.color}</td>
+                                        <td></td>
                                     </tr>
                                 ));
                             })

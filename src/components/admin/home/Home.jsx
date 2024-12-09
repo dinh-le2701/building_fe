@@ -8,6 +8,7 @@ import { MdApartment } from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { MdEmojiTransportation } from "react-icons/md";
 import { GrUserWorker } from "react-icons/gr";
+import { FaFireExtinguisher } from "react-icons/fa";
 
 
 
@@ -16,6 +17,7 @@ const Home = () => {
     const [apartments, setApartments] = useState([]);
     const [staffs, setStaffs] = useState([]);
     const [vehicles, setVehicles] = useState([]);
+    const [equipment, setEquipments] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState()
 
@@ -82,11 +84,28 @@ const Home = () => {
             console.error("Error fetching residents:", err);
         }
     };
+
+    const getEquipments = async () => {
+        try {
+            const response = await fetch('http://localhost:8181/api/fire-safety-equipment');
+            if (!response.ok) {
+                throw new setError(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setEquipments(data);
+            console.log(data.page.totalElements + " equipments")
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            console.error("Error fetching residents:", err);
+        }
+    };
     useEffect(() => {
         getApartments();
         getResidents();
         getStaffs();
-        getVehicles()
+        getVehicles();
+        getEquipments();
     }, []);
 
     return (
@@ -98,47 +117,76 @@ const Home = () => {
 
             <div className='p-4'>
                 <div className="statistical d-flex justify-content-between align-items-center text-center">
-                    <div className="count resident-count bg-white">
-                        <h2 className='d-flex justify-content-center align-items-center text-secondary'>
-                            <FaPeopleGroup className='fs-1 me-3' />Cư Dân
+                    <div className="count resident-count">
+                        <h2 className='d-flex justify-content-center align-items-center'>
+                            <FaPeopleGroup className='icon-text fs-1 me-3' />Cư Dân
                         </h2>
                         <div className='d-flex justify-content-center align-items-center'>
-                            <span className='h4 text-primary text-dark fs-1'>
+                            <span className='h4 fs-1'>
                                 {loading ? 'Đang tải...' : residents?.page?.totalElements || 0}
                             </span>
                         </div>
                     </div>
-                    <div className="count apartment-count bg-white">
-                        <h2 className='d-flex justify-content-center align-items-center text-secondary'>
-                            <MdApartment className='fs-1 me-3' />Căn Hộ
+                    <div className="count apartment-count">
+                        <h2 className='d-flex justify-content-center align-items-center'>
+                            <MdApartment className='icon-text fs-1 me-3' />Căn Hộ
                         </h2>
                         <div className='d-flex justify-content-center align-items-center'>
-                            <span className='h4 text-primary text-dark fs-1'>
+                            <span className='h4 fs-1'>
                                 {loading ? 'Đang tải...' : apartments?.page?.totalElements || 0}
                             </span>
                         </div>
                     </div>
-                    <div className="count vehicle-count bg-white">
-                        <h2 className='d-flex justify-content-center align-items-center text-secondary'>
-                            <MdEmojiTransportation className='fs-1 me-3' />Phương Tiện
+                    <div className="count vehicle-count">
+                        <h2 className='d-flex justify-content-center align-items-center'>
+                            <MdEmojiTransportation className='icon-text fs-1 me-3' />Phương Tiện
                         </h2>
                         <div className='d-flex justify-content-center align-items-center'>
-                            <span className='h4 text-primary text-dark fs-1'>
+                            <span className='h4 fs-1'>
                                 {loading ? 'Đang tải...' : vehicles?.page?.totalElements || 0}
                             </span>
                         </div>
                     </div>
-                    <div className="count staff-count bg-white">
-                        <h2 className='d-flex justify-content-center align-items-center text-secondary'>
-                            <GrUserWorker className='fs-2 me-3' /> Nhân Viên
+                    <div className="count staff-count">
+                        <h2 className='d-flex justify-content-center align-items-center'>
+                            <GrUserWorker className='icon-text fs-2 me-3' /> Nhân Viên
                         </h2>
                         <div className='d-flex justify-content-center align-items-center'>
-                            <span className='h4 text-primary text-dark fs-1'>
+                            <span className='h4 fs-1'>
                                 {loading ? 'Đang tải...' : staffs?.page?.totalElements || 0}
                             </span>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="p-4">
+                <div className="statistical d-flex justify-content-between align-items-center text-center">
+                    <div className="count staff-count w-50 d-flex justify-content-between align-items-center me-3">
+                        <h2 className='d-flex justify-content-center align-items-center'>
+                            <FaFireExtinguisher  className='icon-text fs-2 me-3' /> Thiết Bị PCCC
+                        </h2>
+                        <div className='d-flex justify-content-center align-items-center '>
+                            <span className='h4 fs-1'>
+                                {loading ? 'Đang tải...' : equipment?.page?.totalElements || 0}
+                            </span>
+                        </div>
+                        <PieCharts />
+                    </div>
+
+                    <div className="count staff-count w-50 d-flex justify-content-between align-items-center ms-3">
+                        <h2 className='d-flex justify-content-center align-items-center'>
+                            <FaFireExtinguisher  className='icon-text fs-2 me-3' /> Thiết Bị PCCC
+                        </h2>
+                        <div className='d-flex justify-content-center align-items-center '>
+                            <span className='h4 fs-1'>
+                                {loading ? 'Đang tải...' : equipment?.page?.totalElements || 0}
+                            </span>
+                        </div>
+                        <PieCharts />
+                    </div>
+                </div>
+
             </div>
 
 

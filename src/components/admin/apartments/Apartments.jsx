@@ -3,6 +3,7 @@ import { Button, Table, Form, Modal, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
 import { CiEdit, CiTrash } from "react-icons/ci";
+import { CiSearch } from "react-icons/ci";
 import { ReactNotifications, Store } from 'react-notifications-component';
 
 import './Apartment.css';
@@ -15,7 +16,6 @@ const Apartments = () => {
     // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(true);
     const handleShow = () => setShow(true);
-    // const handleUpdateShow = () => setShowUpdate(true)
     const handleUpdateClose = () => setShowUpdate(false)
     const handleClose = () => setShow(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -236,7 +236,9 @@ const Apartments = () => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </Form.Group>
-                            <Button type="submit">Tìm</Button>
+                            <Button type="submit">
+                            <CiSearch className = "fs-4"/>
+                            </Button>
                         </Form>
                     </div>
                 </div>
@@ -267,11 +269,11 @@ const Apartments = () => {
                                     <td>{apartment.update_at}</td>
                                     <td className="d-flex justify-content-around align-items-center">
                                         <Button variant="secondary" onClick={() => handleApartmentDetails(apartment.apartment_id)}>
-                                            <FaEye className="pb-1" />
+                                            <FaEye className="pb-1 fs-5" />
                                         </Button>
                                         <Button variant="warning">
                                             {/* <CiEdit className="pb-1" onClick={() => handleUpdate(apartment.apartment_id)} /> */}
-                                            <CiEdit className="pb-1" onClick={() => handleUpdateShow(apartment)} />
+                                            <CiEdit className="pb-1 fs-5" onClick={() => handleUpdateShow(apartment)} />
                                         </Button>
                                     </td>
                                 </tr>

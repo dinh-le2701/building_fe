@@ -4,7 +4,7 @@ import 'react-notifications-component/dist/theme.css';
 import { ReactNotifications, Store } from 'react-notifications-component';
 import { FaAddressBook } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-
+import { FaPeopleGroup } from "react-icons/fa6";
 
 
 const Accounts = () => {
@@ -19,10 +19,12 @@ const Accounts = () => {
         role: ""
     });
     const [apartments, setApartments] = useState([]);
+    const [staffs, setStaffs] = useState([])
     const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [selectedStaffId, setSelectedStaffId] = useState(null);
     const [selectedApartmentId, setSelectedApartmentId] = useState(null);
     const [showModal, setShowModal] = useState(false);
-
+    const [showStaffModal, setShowStaffModal] = useState(false);
     // Fetch danh sách tài khoản
     const fetchAccounts = async () => {
         const response = await fetch("http://localhost:8181/api/account");
@@ -37,6 +39,14 @@ const Accounts = () => {
         const data = await response.json();
         setApartments(data)
         console.log(apartments)
+
+    }
+
+    const fetchStaffs = async () => {
+        const response = await fetch("http://localhost:8181/api/v1/staff");
+        const data = await response.json();
+        setStaffs(data)
+        console.log("staffs: " + staffs)
 
     }
 
@@ -62,10 +72,35 @@ const Accounts = () => {
         });
     };
 
+    // Gửi request gán tài khoản vào nhân viên
+    const assignAccountToStaff = () => {
+        // http://localhost:8181/api/account/20/assign-to-staff/7
+        fetch(`http://localhost:8181/api/account/${selectedAccountId}/assign-to-staff/${selectedStaffId}`, {
+            method: "POST",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setShowModal(false);
+                console.log(data)
+            });
+        Store.addNotification({
+            title: "Gán tài khoản thành công!",
+            type: "success", // green color for success
+            insert: "top",
+            container: "top-left",
+            dismiss: {
+                duration: 2000, // Auto-dismiss after 4 seconds
+                onScreen: true
+            }
+        });
+    };
+
     useEffect(() => {
         fetchAccounts()
         fetchApartments();
+        fetchStaffs();
         getAccounts();
+        getStaffs();
     }, []);
 
 
@@ -83,6 +118,39 @@ const Accounts = () => {
             const data = await response.json();
             if (response.ok) {
                 setAccounts(data);
+                console.log('Fetched accounts:', data);
+                Store.addNotification({
+                    title: "Get Account successfully!",
+                    type: "success", // green color for success
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                        duration: 2000, // Auto-dismiss after 4 seconds
+                        onScreen: true
+                    }
+                });
+            } else {
+                console.error('Failed to fetch accounts:', data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    // get residents api
+    const getStaffs = async () => {
+        try {
+            const response = await fetch('http://localhost:8181/api/v1/staff', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${localStorage.getItem('token')}` // Use token for protected routes
+                },
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setStaffs(data);
                 console.log('Fetched accounts:', data);
                 Store.addNotification({
                     title: "Get Account successfully!",
@@ -221,6 +289,17 @@ const Accounts = () => {
                                     >
                                         <FaAddressBook />
                                     </Button>
+
+                                    <Button
+                                        variant="primary"
+                                        onClick={() => {
+                                            setSelectedAccountId(account.id);
+                                            setShowStaffModal(true);
+                                        }}
+                                    >
+                                        <FaPeopleGroup />
+                                    </Button>
+
                                     <Button variant="danger" type="submit" onClick={() => handleDelete(account.id)}>
                                         <MdDeleteForever />
                                     </Button>
@@ -312,6 +391,38 @@ const Accounts = () => {
                         Hủy
                     </Button>
                     <Button variant="primary" onClick={assignAccountToApartment}>
+                        Gán tài khoản
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal chọn nhân viên */}
+            <Modal show={showStaffModal} onHide={() => setShowStaffModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Chọn Nhân Viên</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <select
+                        className="form-select"
+                        onChange={(e) => setSelectedStaffId(e.target.value)}
+                    >
+                        <option value="">-- Chọn nhân viên--</option>
+                        {staffs.content && staffs.content.length > 0 ? (
+                            staffs.content.map((staff) => (
+                                <option key={staff.apartment_id} value={staff.staff_id}>
+                                    {staff.staff_name}
+                                </option>
+                            ))
+                        ) : (
+                            <option disabled>No apartments found</option>
+                        )}
+                    </select>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Hủy
+                    </Button>
+                    <Button variant="primary" onClick={assignAccountToStaff}>
                         Gán tài khoản
                     </Button>
                 </Modal.Footer>

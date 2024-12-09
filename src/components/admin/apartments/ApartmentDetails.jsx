@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Form, Modal } from 'react-bootstrap'
+import { Button, Table, Form, Modal, Container } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
 import { Link } from 'react-router-dom'
 import fetchURL from '../../../api/AxiosInstance';
@@ -52,8 +52,8 @@ const ApartmentDetails = () => {
                 setResidentApartment(data.residents); // Giả sử bạn đang lưu danh sách cư dân vào state residents
                 setApartments(data); // Cập nhật thông tin căn hộ nếu cần
                 console.log(data)
+                console.log(apartments.apartment_name)
             }
-
             Store.addNotification({
                 title: "Thông tin chi tiết căn hộ",
                 type: "success", // green color for success
@@ -270,129 +270,135 @@ const ApartmentDetails = () => {
             </div>
 
             <div className="apartment-resident-details bg-white m-3 p-3">
-                <h4 className="text-center">Thông tin cư dân trong căn hộ</h4>
+                <Container className='w-75'>
+                    <h4 className="text-center">Thông tin cư dân trong căn hộ</h4>
 
-                <Table className='w-100 text-center' hover responsive>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên Phòng</th>
-                            <th>Tên Người Dân</th>
-                            <th>Giới Tính</th>
-                            <th>Số ĐT</th>
-                            <th>Email</th>
-                            <th>Ngày Nhận Phòng</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {residentApartment.length > 0 ? (
-                            residentApartment.map((resident, id) => (
-                                <tr key={id}>
-                                    <td>{id + 1}</td>
-                                    <td>{apartments.apartment_name}</td>
-                                    <td>{resident.resident_name}</td>
-                                    <td>{resident.sex}</td>
-                                    <td>{resident.phone_number}</td>
-                                    <td>{resident.email}</td>
-                                    <td>{resident.move_in_date}</td>
-                                    <td>
-                                        <Button variant='danger' onClick={() => {
-                                            setAccountId(apartments.account)
-                                            handleDelete(resident.resident_id)
-                                        }}>Xoá</Button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr className='text-center'>
-                                <td colSpan="9">No apartments found</td>
+                    <Table className='w-100 text-center' hover responsive>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên Phòng</th>
+                                <th>Tên Người Dân</th>
+                                <th>Giới Tính</th>
+                                <th>Số ĐT</th>
+                                <th>Email</th>
+                                <th>Ngày Nhận Phòng</th>
+                                <th>Hành Động</th>
                             </tr>
-                        )}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {residentApartment.length > 0 ? (
+                                residentApartment.map((resident, id) => (
+                                    <tr key={id}>
+                                        <td>{id + 1}</td>
+                                        <td>{apartments.apartment_name}</td>
+                                        <td>{resident.resident_name}</td>
+                                        <td>{resident.sex}</td>
+                                        <td>{resident.phone_number}</td>
+                                        <td>{resident.email}</td>
+                                        <td>{resident.move_in_date}</td>
+                                        <td>
+                                            <Button variant='danger' onClick={() => {
+                                                setAccountId(apartments.account)
+                                                handleDelete(resident.resident_id)
+                                            }}>Xoá</Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr className='text-center'>
+                                    <td colSpan="9">No apartments found</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                </Container>
             </div>
 
             {/* Account */}
             <div className="apartment-resident-details bg-white m-3 p-3">
-                <h4 className="text-center">Thông tin tài khoản cho căn hộ</h4>
+                <Container className='w-75'>
+                    <h4 className="text-center">Thông tin tài khoản cho căn hộ</h4>
 
-                <Table className='w-100 text-center' hover responsive>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Email</th>
-                            <th>Quyền</th>
-                            <th>Trạng thái</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {apartments && apartments.accounts && apartments.accounts.length > 0 ? (
-                            apartments.accounts.map((account) => (
-                                <tr key={account.id}>
-                                    <td>{account.id}</td>
-                                    <td>{account.email}</td>
-                                    <td>{account.role}</td>
-                                    <td>{account.status}</td>
-                                    <td>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
-                                        >
-                                            Xóa
-                                        </Button>
-                                    </td>
-
-                                </tr>
-                            ))
-                        ) : (
+                    <Table className='w-100 text-center' hover responsive>
+                        <thead>
                             <tr>
-                                <td colSpan="5">No accounts available</td>
+                                <th>STT</th>
+                                <th>Email</th>
+                                <th>Quyền</th>
+                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
-                        )}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {apartments && apartments.accounts && apartments.accounts.length > 0 ? (
+                                apartments.accounts.map((account) => (
+                                    <tr key={account.id}>
+                                        <td>{account.id}</td>
+                                        <td>{account.email}</td>
+                                        <td>{account.role}</td>
+                                        <td>{account.status}</td>
+                                        <td>
+                                            <Button
+                                                variant="danger"
+                                                onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
+                                            >
+                                                Xóa
+                                            </Button>
+                                        </td>
+
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5">No accounts available</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                </Container>
             </div>
 
             {/* Thông tin dịch vụ sử dụng cho căn hộ */}
             <div className="apartment-resident-details bg-white m-3 p-3">
-                <h4 className="text-center">Thông tin dịch vụ sử dụng</h4>
+                <Container className='w-75'>
+                    <h4 className="text-center">Thông tin dịch vụ sử dụng</h4>
 
-                <Table className='w-100 text-center' hover responsive>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên Dịch Vụ</th>
-                            <th>Trạng thái</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* {apartments && apartments.accounts && apartments.accounts.length > 0 ? (
-                            apartments.accounts.map((account) => (
-                                <tr key={account.id}>
-                                    <td>{account.id}</td>
-                                    <td>{account.email}</td>
-                                    <td>{account.status}</td>
-                                    <td>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
-                                        >
-                                            Xóa
-                                        </Button>
-                                    </td>
-
-                                </tr>
-                            ))
-                        ) : (
+                    <Table className='w-100 text-center' hover responsive>
+                        <thead>
                             <tr>
-                                <td colSpan="5">No accounts available</td>
+                                <th>STT</th>
+                                <th>Tên Dịch Vụ</th>
+                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
-                        )} */}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {/* {apartments && apartments.accounts && apartments.accounts.length > 0 ? (
+            apartments.accounts.map((account) => (
+                <tr key={account.id}>
+                    <td>{account.id}</td>
+                    <td>{account.email}</td>
+                    <td>{account.status}</td>
+                    <td>
+                        <Button
+                            variant="danger"
+                            onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
+                        >
+                            Xóa
+                        </Button>
+                    </td>
+
+                </tr>
+            ))
+        ) : (
+            <tr>
+                <td colSpan="5">No accounts available</td>
+            </tr>
+        )} */}
+                        </tbody>
+                    </Table>
+                </Container>
             </div>
 
             {/* Modal */}
