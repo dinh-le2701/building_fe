@@ -1,22 +1,107 @@
-import React from 'react';
-import { Button, Table, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Table, Form, Container } from 'react-bootstrap';
+import { ReactNotifications, Store } from 'react-notifications-component';
+
 import './Service.css'
 
 const Service = () => {
+    const [selectedApartmentName, setSelectedApartmentName] = useState("");
+    const [apartments, setApartments] = useState([]);
+    const [electricityNew, setElectricityNew] = useState('');
+    const [waterNew, setWaterNew] = useState('');
+
+    const fetchApartments = async () => {
+        try {
+            const response = await fetch("http://localhost:8181/api/v1/apartment");
+            const data = await response.json();
+            setApartments(data.content); // Xử lý nếu data.content tồn tại
+            console.log(data.content); // Log data sau khi lấy thông tin căn hộ
+        } catch (error) {
+            console.error("Error fetching apartments:", error);
+        }
+    };
 
 
+
+    useEffect(() => {
+        fetchApartments();
+    }, []); // Chỉ gọi fetchApartments khi component mount
+
+    // const handleApartmentChange = (e) => {
+    //     const apartmentName = e.target.value;
+    //     setSelectedApartmentName(apartmentName); // Cập nhật tên căn hộ được chọn
+    //     console.log("Căn hộ đã chọn:", apartmentName); // Log tên căn hộ được chọn
+    // };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!selectedApartmentName || !electricityNew || !waterNew) {
+            alert('Vui lòng điền đầy đủ thông tin.');
+            return;
+        }
+
+        const apartmentId = selectedApartmentName;  // Assume selectedApartmentName contains the apartment ID
+
+        try {
+            const response = await fetch(`http://localhost:8181/api/v1/utility-usage/${apartmentId}/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    electricity_new: electricityNew,
+                    water_new: waterNew,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Lỗi khi tạo hoá đơn');
+            }
+
+            const data = await response.json();
+            console.log('Response:', data);
+            Store.addNotification({
+                title: "Đã Gửi Thành Công!",
+                message: "Đã tính toán chi phí dịch vụ và gửi thông báo về email cho căn hộ.",
+                type: "success", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 4000, // Auto-dismiss after 4 seconds
+                    onScreen: true
+                }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            Store.addNotification({
+                title: "Gửi Thất Bại!",
+                message: "Tính toán chi phí dịch vụ và gửi thông báo về cho căn hộ thất bại.",
+                type: "warning", // green color for success
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 4000, // Auto-dismiss after 4 seconds
+                    onScreen: true
+                }
+            });
+        }
+    };
 
     return (
         <div className='service'>
+            <ReactNotifications />
+
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Chi phí dịch vụ</h3>
             </div>
 
             <div className="table-content bg-white m-3 p-4 text-center">
-                <Table hover striped bordered className="text-center">
+                <Table hover striped className="text-center">
                     <thead>
                         <tr>
-                            <th className='fs-2' colSpan={3}>Bảng Giá Bán Lẻ Điện Cho Sinh Hoạt</th>
+                            <th className='fs-2' colSpan={3}>Bảng Giá Điện Cho Sinh Hoạt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,57 +113,37 @@ const Service = () => {
                         <tr>
                             <th>Bậc 1</th>
                             <td>Từ 0 - 50 kWh</td>
-                            <td>1.893</td>
+                            <td>1.893 đồng / kWh</td>
                         </tr>
                         <tr>
                             <th>Bậc 2</th>
                             <td>Từ 51 - 100 kWh</td>
-                            <td>1.956</td>
+                            <td>1.956 đồng / kWh</td>
                         </tr>
                         <tr>
                             <th>Bậc 3</th>
                             <td>Từ 101 - 200 kWh</td>
-                            <td>2.271</td>
+                            <td>2.271 đồng / kWh</td>
                         </tr>
                         <tr>
                             <th>Bậc 4</th>
                             <td>Từ 201 - 300 kWh</td>
-                            <td>2.860</td>
+                            <td>2.860 đồng / kWh</td>
                         </tr>
                         <tr>
                             <th>Bậc 5</th>
                             <td>Từ 301 - 400 kWh</td>
-                            <td>3.197</td>
+                            <td>3.197 đồng / kWh</td>
                         </tr>
                         <tr>
                             <th>Bậc 6</th>
                             <td>Từ 401 trở lên kWh</td>
-                            <td>3.302</td>
-                        </tr>
-
-                        <tr class="text-center">
-                            <th>Phí quản Lý</th>
-                            <td colspan="3">300000</td>
-                        </tr>
-
-                        <tr class="text-center">
-                            <th>Tiền nước</th>
-                            <td colspan="3">100000</td>
-                        </tr>
-
-                        <tr class="text-center">
-                            <th rowSpan={2} >Tiền Phương Tiện</th>
-                            <th>Xe Máy</th>
-                            <th>Xe Ô tô</th>
-                        </tr>
-                        <tr class="text-center">
-                            <td>80000</td>
-                            <td>120000</td>
+                            <td>3.302 đồng / kWh</td>
                         </tr>
                     </tbody>
                 </Table>
 
-                <Table hover striped bordered className="text-center">
+                <Table hover striped className="table-content text-center">
                     <thead>
                         <tr><th className='fs-2' colSpan={3}>Bảng Giá Nước Sạch Sinh Hoạt</th></tr>
                     </thead>
@@ -111,24 +176,86 @@ const Service = () => {
                     </tbody>
                 </Table>
 
+                <Table hover striped className="text-center">
+                    <thead>
+                        <tr><th className='fs-2' colSpan={3}>Các Phí Khác</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Phí Vệ Sinh</th>
+                            <td>100.000 đồng</td>
+                        </tr>
+                        <tr>
+                            <th>Phí Quản Lý</th>
+                            <td>150.000 đồng</td>
+                        </tr>
+
+                        <tr>
+                            <th colSpan={2}>Phí Phương Tiện</th>
+                        </tr>
+                        <tr>
+                            <th>Xe Máy</th>
+                            <th>Xe Hơi</th>
+                        </tr>
+                        <tr>
+                            <td>80000 đồng</td>
+                            <td>100000 đồng</td>
+                        </tr>
+                    </tbody>
+                </Table>
+
             </div>
-            <div className='table-content p-3 bg-white m-3'>
-                <Form>
-                    <Form.Group className='mb-2'>
-                        <Form.Label>Nhập số điện tiêu thụ:</Form.Label>
-                        <div className="d-flex justify-content-between align-items-center">
-                            <Form.Control className='me-4'></Form.Control>
-                            <Button>Tính</Button>
-                        </div>
+
+            <Container className="table-content p-3 bg-white m-3">
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="exampleForm.SelectCustom" className=" mb-3 w-75">
+                        {/* Optional */}
                     </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Tổng:</Form.Label>
-                        <Form.Control type='span'></Form.Control>
+                    <Form.Group className="mb-2 container w-75">
+                        <Form.Label>Chọn Phòng</Form.Label>
+                        <Form.Select
+                            className="form-select"
+                            value={selectedApartmentName}
+                            onChange={(e) => setSelectedApartmentName(e.target.value)}
+                        >
+                            <option>-- Chọn căn hộ --</option>
+                            {apartments.map((apartment) => (
+                                <option key={apartment.apartment_id} value={apartment.apartment_id}>
+                                    {apartment.apartment_name}
+                                </option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-2 container w-75">
+                        <Form.Label>Nhập Số Điện Mới: </Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={electricityNew}
+                            onChange={(e) => setElectricityNew(e.target.value)}
+                            placeholder="Nhập số điện mới"
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-4 container w-75">
+                        <Form.Label>Nhập Số Nước Mới: </Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={waterNew}
+                            onChange={(e) => setWaterNew(e.target.value)}
+                            placeholder="Nhập số nước mới"
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2 container w-50 text-center">
+                        <Button className="bg-primary text-light w-75" type="submit">
+                            Tính
+                        </Button>
                     </Form.Group>
                 </Form>
-            </div>
+            </Container>
         </div>
-    )
-}
+    );
+};
 
-export default Service
+export default Service;

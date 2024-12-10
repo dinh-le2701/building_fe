@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import { Container, Form, Button, Image } from 'react-bootstrap'
 import './Slider.css'

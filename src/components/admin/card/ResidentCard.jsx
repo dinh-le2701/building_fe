@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Container, Modal, Form } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
@@ -88,7 +89,7 @@ const ResidentCard = () => {
                                     <td>{(currentPage - 0) * size + id + 1}</td>
                                     <td>{card.cardCode}</td>
                                     <td>{card.card_status}</td>
-                                    <td>{card.create_date}</td>
+                                    <td>{card.createDate}</td>
                                     {/* <td className='d-flex justify-content-around align-items-center'>
                                         <Button variant="secondary">
                                             <FaEye className='pb' onClick={() => handleResidentDetails(resident.resident_id)} />
@@ -104,7 +105,7 @@ const ResidentCard = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="7" className="text-center">No resident data available</td>
+                                <td colSpan="7" className="text-center">Không thẻ nào có sẵn</td>
                             </tr>
                         )}
 

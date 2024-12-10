@@ -3,9 +3,12 @@ import { Button, Table, Form, Modal } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ReactNotifications, Store } from 'react-notifications-component';
-import { FaEye } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
+import { FaEdit } from "react-icons/fa";
+import { FaRegEye } from "react-icons/fa";
 import { CiTrash } from "react-icons/ci";
+import { FaSquarePlus } from "react-icons/fa6";
+import "../icon.css"
+
 
 const Resident = () => {
     const [show, setShow] = useState(false);
@@ -35,12 +38,6 @@ const Resident = () => {
     });
 
     const [currentResidentId, setCurrentResidentId] = useState(null); // To store the resident ID for editing
-
-    // const formatDate = (dateString) => {
-    //     // Chuyển đổi chuỗi "yyyy/MM/dd" thành "yyyy-MM-dd"
-    //     const [year, month, day] = dateString.split('/');
-    //     return `${year}-${month}-${day}`;
-    // };
 
     useEffect(() => {
         fetchResidents(currentPage, size);
@@ -78,24 +75,6 @@ const Resident = () => {
                     onScreen: true
                 }
             });
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const loadResidents = async (page, size) => {
-        try {
-            const response = await fetch(`http://localhost:8908/api/v1/resident`);
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch staff data');
-            }
-            const data = await response.json();
-            setResidents(data.content); // Giả sử dữ liệu được trả về trong `data.content`
-            setTotalPages(data.totalPages);
-
         } catch (error) {
             setError(error.message);
         } finally {
@@ -258,7 +237,7 @@ const Resident = () => {
                         mục
                     </div>
                     <div>
-                        <Button className='me-3' onClick={handleShowAdd}>Thêm mới</Button>
+                        <FaSquarePlus className='icon fs-1 text-primary' onClick={handleShowAdd} />
                         <Button variant='success' onClick={handlePrint}>In</Button>
                     </div>
                 </div>
@@ -286,15 +265,9 @@ const Resident = () => {
                                     <td>{resident.birthday}</td>
                                     <td>{resident.move_in_date}</td>
                                     <td className='d-flex justify-content-around align-items-center'>
-                                        <Button variant="secondary">
-                                            <FaEye className='pb' onClick={() => handleResidentDetails(resident.resident_id)} />
-                                        </Button>
-                                        <Button variant="warning" onClick={() => handleShowEdit(resident)}>
-                                            <CiEdit className='pb' />
-                                        </Button>
-                                        <Button variant="danger" onClick={() => deleteResidentById(resident.resident_id)}>
-                                            <CiTrash className='pb' />
-                                        </Button>
+                                        <FaRegEye className='icon fs-2 text-success me-3' onClick={() => handleResidentDetails(resident.resident_id)}  style={{ fontWeight: "bold" }} />
+                                        <FaEdit className='icon pb fs-3 text-warning' onClick={() => handleShowEdit(resident)} />
+                                        <CiTrash className='icon pb fs-3 text-danger' onClick={() => deleteResidentById(resident.resident_id)} />
                                     </td>
                                 </tr>
                             ))

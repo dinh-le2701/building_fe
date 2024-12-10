@@ -86,7 +86,6 @@ const data = [
 ];
 
 export default class Example extends PureComponent {
-    static demoUrl = 'https://codesandbox.io/p/sandbox/line-chart-width-xaxis-padding-8v7952';
     componentDidMount() {
         // Giả lập thông báo lỗi
         this.simulateError();
@@ -113,7 +112,7 @@ export default class Example extends PureComponent {
         return (
             <Container>
                 <ToastContainer />
-                <h1 className='text-center text-danger'>Thống Kê Tài Nguyên Sử Dụng</h1>
+                <h1 className='text-center text-primary mb-5'>Thống Kê Tài Nguyên Sử Dụng</h1>
                 <LineChart
                     className='mx-auto'
                     title='Chi phí'
@@ -133,8 +132,8 @@ export default class Example extends PureComponent {
                     <Tooltip />
                     <Legend />
                     <Line connectNulls type="monotone" dataKey="uv" stroke="#938569" fill="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="amt" stroke="#000" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="uv" stroke="#f5ac67" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="amt" stroke="#cf5820" activeDot={{ r: 8 }} />
                 </LineChart>
             </Container>
         );

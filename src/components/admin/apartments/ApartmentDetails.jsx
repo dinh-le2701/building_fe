@@ -4,8 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal, Container } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
 import { Link } from 'react-router-dom'
+import { SiMinutemailer } from "react-icons/si";
+import { CiTrash } from "react-icons/ci";
+import { IoIosPersonAdd } from "react-icons/io";
 import fetchURL from '../../../api/AxiosInstance';
 import { ReactNotifications, Store } from 'react-notifications-component';
+import "../icon.css"
 
 const ApartmentDetails = () => {
     const { id } = useParams();
@@ -234,7 +238,10 @@ const ApartmentDetails = () => {
                     <Link className='px-3' to={"/admin/apartment"}>
                         <b>Trở về</b>
                     </Link>
-                    <Button onClick={handleShow}>Thêm Cư Dân</Button>
+                    <Button>
+                        <IoIosPersonAdd className='icon  fs-2 text-light' onClick={handleShow} />
+                    </Button>
+
                 </div>
             </div>
 
@@ -283,7 +290,7 @@ const ApartmentDetails = () => {
                                 <th>Số ĐT</th>
                                 <th>Email</th>
                                 <th>Ngày Nhận Phòng</th>
-                                <th>Hành Động</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -298,10 +305,14 @@ const ApartmentDetails = () => {
                                         <td>{resident.email}</td>
                                         <td>{resident.move_in_date}</td>
                                         <td>
-                                            <Button variant='danger' onClick={() => {
+                                            <CiTrash className='icon pb fs-2 text-danger' onClick={() => {
                                                 setAccountId(apartments.account)
                                                 handleDelete(resident.resident_id)
-                                            }}>Xoá</Button>
+                                            }} />
+                                            {/* <Button variant='danger' onClick={() => {
+                                                setAccountId(apartments.account)
+                                                handleDelete(resident.resident_id)
+                                            }}>Xoá</Button> */}
                                         </td>
                                     </tr>
                                 ))
@@ -339,12 +350,13 @@ const ApartmentDetails = () => {
                                         <td>{account.role}</td>
                                         <td>{account.status}</td>
                                         <td>
-                                            <Button
+                                            <CiTrash className='icon pb fs-2 text-danger' onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)} />
+                                            {/* <Button
                                                 variant="danger"
-                                                onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
+                                                
                                             >
                                                 Xóa
-                                            </Button>
+                                            </Button> */}
                                         </td>
 
                                     </tr>
@@ -368,34 +380,34 @@ const ApartmentDetails = () => {
                         <thead>
                             <tr>
                                 <th>STT</th>
-                                <th>Tên Dịch Vụ</th>
-                                <th>Trạng thái</th>
+                                <th>Ngày Tạo</th>
+                                <th>Tổng Giá Điện</th>
+                                <th>Tổng Giá Nước</th>
+                                <th>Tổng Sử Dụng</th>
+                                <th>Giá Tổng</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* {apartments && apartments.accounts && apartments.accounts.length > 0 ? (
-            apartments.accounts.map((account) => (
-                <tr key={account.id}>
-                    <td>{account.id}</td>
-                    <td>{account.email}</td>
-                    <td>{account.status}</td>
-                    <td>
-                        <Button
-                            variant="danger"
-                            onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)}
-                        >
-                            Xóa
-                        </Button>
-                    </td>
-
-                </tr>
-            ))
-        ) : (
-            <tr>
-                <td colSpan="5">No accounts available</td>
-            </tr>
-        )} */}
+                            {apartments && apartments.utilityUsages && apartments.utilityUsages.length > 0 ? (
+                                apartments.utilityUsages.map((utilityUsage, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{utilityUsage.create_date}</td>
+                                        <td>{utilityUsage.electricTotalPrice}</td>
+                                        <td>{utilityUsage.waterTotal_price}</td>
+                                        <td>{utilityUsage.totalUsage}</td>
+                                        <td>{utilityUsage.totalPrice}</td>
+                                        <td>
+                                            <SiMinutemailer className="icon fs-2 pb-1 text-success fs-5" />
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="6">No accounts available</td>
+                                </tr>
+                            )}
                         </tbody>
                     </Table>
                 </Container>

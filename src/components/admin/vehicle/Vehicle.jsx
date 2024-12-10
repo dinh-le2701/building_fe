@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-import fetchURL from '../../../api/AxiosInstance';
 import { Link } from 'react-router-dom'
 import { ReactNotifications, Store } from 'react-notifications-component';
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import './Home.css';
@@ -9,6 +10,9 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { MdEmojiTransportation } from "react-icons/md";
 import { GrUserWorker } from "react-icons/gr";
 import { FaFireExtinguisher } from "react-icons/fa";
+import { MdFeedback } from "react-icons/md";
+import FeedbackChart from '../charts/FeedbackChart.jsx';
+
 
 
 
@@ -18,6 +22,7 @@ const Home = () => {
     const [staffs, setStaffs] = useState([]);
     const [vehicles, setVehicles] = useState([]);
     const [equipment, setEquipments] = useState([])
+    const [feedback, setFeedback] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState()
 
@@ -65,7 +70,7 @@ const Home = () => {
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            console.error("Error fetching residents:", err);
+            console.error("Error fetching staff:", err);
         }
     };
 
@@ -81,7 +86,7 @@ const Home = () => {
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            console.error("Error fetching residents:", err);
+            console.error("Error fetching vehicles:", err);
         }
     };
 
@@ -97,15 +102,33 @@ const Home = () => {
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            console.error("Error fetching residents:", err);
+            console.error("Error fetching vehicles:", err);
         }
     };
+
+    const getFeedbacks = async () => {
+        try {
+            const response = await fetch('http://localhost:8181/api/v1/feedback');
+            if (!response.ok) {
+                throw new setError(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setFeedback(data);
+            console.log(data.page.totalElements + " feedbacks")
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            console.error("Error fetching feedback:", err);
+        }
+    };
+    
     useEffect(() => {
         getApartments();
         getResidents();
         getStaffs();
         getVehicles();
         getEquipments();
+        getFeedbacks();
     }, []);
 
     return (
@@ -176,14 +199,14 @@ const Home = () => {
 
                     <div className="count staff-count w-50 d-flex justify-content-between align-items-center ms-3">
                         <h2 className='d-flex justify-content-center align-items-center'>
-                            <FaFireExtinguisher  className='icon-text fs-2 me-3' /> Thiết Bị PCCC
+                            <MdFeedback   className='icon-text fs-2 me-3' /> Phản Hồi
                         </h2>
                         <div className='d-flex justify-content-center align-items-center '>
                             <span className='h4 fs-1'>
-                                {loading ? 'Đang tải...' : equipment?.page?.totalElements || 0}
+                                {loading ? 'Đang tải...' : feedback?.page?.totalElements || 0}
                             </span>
                         </div>
-                        <PieCharts />
+                        <FeedbackChart />
                     </div>
                 </div>
 
@@ -191,19 +214,10 @@ const Home = () => {
 
 
             <div className="charts">
-                <div className='d-flex justify-content-between align-items-center'>
-                    <div className="pie-charts w-25 bg-white ms-4 text-center">
-                        <PieCharts />
-                    </div>
-                    <div className="pie-charts w-75 bg-white mx-4 text-center">
-                        <BarCharts />
-                    </div>
-                </div>
-
                 <Row>
                     <Col>
-                        <div className="charts bg-white m-4">
-                            <LineCharts />
+                        <div className="charts bg-white m-4 py-5">
+                            <LineCharts/>
                         </div>
                     </Col>
                 </Row>

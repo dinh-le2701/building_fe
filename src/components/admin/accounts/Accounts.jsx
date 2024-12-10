@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
 import 'react-notifications-component/dist/theme.css';
@@ -116,6 +117,7 @@ const Accounts = () => {
             });
 
             const data = await response.json();
+            console.log(data)
             if (response.ok) {
                 setAccounts(data);
                 console.log('Fetched accounts:', data);
@@ -190,7 +192,6 @@ const Accounts = () => {
                 password: '',
                 role: ''
             });
-
             getAccounts(); // Lấy lại danh sách tài khoản
             handleClose(); // Đóng form nếu cần
         }
@@ -224,9 +225,8 @@ const Accounts = () => {
                     },
                 });
 
-                if (response.ok) {
+                if (response.ok && accounts.role !== "ADMIN") {
                     alert("Xoá tài khoản thành công!");
-                    // Thêm logic nếu cần, ví dụ: cập nhật danh sách người dùng
                     fetchAccounts();
                 } else {
                     const errorData = await response.json();

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import React, { useEffect, useState } from 'react';
 import { Table, Form } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
@@ -9,7 +8,6 @@ import fetchURL from '../../../api/AxiosInstance';
 const StaffDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
   const [staffs, setStaffs] = useState(null);
-  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     fetchResidentDetails();

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom'

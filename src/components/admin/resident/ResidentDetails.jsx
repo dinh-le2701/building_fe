@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, Container, Modal, Form } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
 import { Link } from 'react-router-dom'
-import fetchURL from '../../../api/AxiosInstance';
-import { MdDeleteForever } from "react-icons/md";
+import { FaAddressCard } from "react-icons/fa";
+import { MdPedalBike } from "react-icons/md";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import { ReactNotifications, Store } from 'react-notifications-component';
+
 
 const ResidentDetails = () => {
   const { id } = useParams(); // Lấy id từ URL
@@ -23,10 +25,9 @@ const ResidentDetails = () => {
     color: ""
   });
 
-
-  const [totalPages, setTotalPages] = useState([])
-  const [error, setError] = useState([])
-  const [loading, setLoading] = useState([])
+  useEffect(() => {
+    fetchResidentDetails();
+  }, [id]);
 
   const fetchResidentDetails = async () => {
     try {
@@ -57,6 +58,32 @@ const ResidentDetails = () => {
     }
   };
 
+  const createCardForResident = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8181/api/v1/resident/${id}/card`, {
+        method: 'POST'
+      });
+
+      const confirmDelete = window.confirm("Bạn có chắc muốn thêm mới thẻ cho cư dân?");
+      if (!confirmDelete) return; // Người dùng không xác nhận
+
+      if (response.ok) {
+        fetchResidentDetails(); // Cập nhật lại danh sách căn hộ
+        Store.addNotification({
+          title: "Tạo mới phương tiện thành công!",
+          type: "success", // green color for success
+          insert: "top",
+          container: "top-left",
+          dismiss: {
+            duration: 1000, // Auto-dismiss after 4 seconds
+            onScreen: true
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const createVehicle = async (apartmentData) => {
     try {
@@ -84,7 +111,7 @@ const ResidentDetails = () => {
           }
         });
       } else {
-        console.error('Failed to create apartment:', data.message);
+        console.error('Lỗi khi thêm mới phương tiện:', data.message);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -103,13 +130,6 @@ const ResidentDetails = () => {
     e.preventDefault();
     createVehicle(newVehicle); // Gửi thông tin căn hộ mới
   };
-
-
-  useEffect(() => {
-    fetchResidentDetails();
-  }, [id]);
-
-
 
   if (!residents) {
     return <div className='fs-1'>Loading...</div>;
@@ -155,10 +175,19 @@ const ResidentDetails = () => {
         <h3 className='m-0'>Chi Tiết Cư Dân</h3>
         <div>
           <Link className='pe-3' to={"/admin/resident"}>
-            <b>Trở về</b>
+            <Button className='bg-secondary text-light'>
+              <IoIosArrowRoundBack />
+            </Button>
+            {/* 
+            <b>Trở về</b> */}
           </Link>
+          <Button onClick={() => createCardForResident(id)} variant='success' className='text-right me-3'>
+            <FaAddressCard />
 
-          <Button onClick={handleShow}>Thêm xe</Button>
+          </Button>
+          <Button onClick={handleShow}>
+            <MdPedalBike />
+          </Button>
         </div>
       </div>
 
@@ -230,7 +259,7 @@ const ResidentDetails = () => {
                   ))
                 ) : (
                   <tr className='text-center'>
-                    <td colSpan="9">Không tìm thấy phương tiện</td>
+                    <td colSpan="9">Không có thông tin phương tiện cho cư dân</td>
                   </tr>
                 )}
             </tbody>
@@ -257,7 +286,7 @@ const ResidentDetails = () => {
                     <td>{id + 1}</td>
                     <td>{card.cardCode}</td>
                     <td>{card.card_status}</td>
-                    <td>{card.create_date}</td>
+                    <td>{card.createDate}</td>
                     <td>
                       <Button variant='danger' onClick={() => { handleDeleteCard(card.id) }}>Xoá</Button>
                     </td>
@@ -265,16 +294,15 @@ const ResidentDetails = () => {
                 ))
               ) : (
                 <tr className='text-center'>
-                  <td colSpan="9">Không tìm thấy phương tiện</td>
+                  <td colSpan="9">Không có thông tin thẻ cho cư dân</td>
                 </tr>
               )}
           </Table>
         </Container>
       </div>
-
       <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Thêm Mới Phương Tiện</Modal.Title>
+          <Modal.Title>Thêm Phương Tiện Cho Cư Dân</Modal.Title>
         </Modal.Header>
         <Modal.Body className='p-4'>
           <Form onSubmit={handleSubmit}>
@@ -332,6 +360,7 @@ const ResidentDetails = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
     </div>
 
   );

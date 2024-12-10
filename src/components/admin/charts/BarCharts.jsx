@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { PureComponent, useState } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
