@@ -112,7 +112,7 @@ const Service = () => {
                 </Table>
 
             </div>
-            <div className='p-3 bg-white m-3'>
+            <div className='table-content p-3 bg-white m-3'>
                 <Form>
                     <Form.Group className='mb-2'>
                         <Form.Label>Nhập số điện tiêu thụ:</Form.Label>

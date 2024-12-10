@@ -171,7 +171,7 @@ const Notification = () => {
           <b>Trở về</b>
         </Link>
       </div>
-      <div className="form p-3 bg-white m-3">
+      <div className="table-content form p-3 bg-white m-3">
         <ReactNotifications />
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">

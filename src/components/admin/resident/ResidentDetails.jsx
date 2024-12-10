@@ -237,7 +237,7 @@ const ResidentDetails = () => {
           </Table>
         </Container>
       </div>
-      <div className=' bg-white m-3 p-5 w-100'>
+      <div className=' bg-white m-3 p-5'>
         <Container className='w-75'>
           <h4 className='text-center'>Thẻ Cho Cư Dân</h4>
           <Table hover className='text-center w-100'>

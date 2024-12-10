@@ -113,7 +113,7 @@ export default class Example extends PureComponent {
         return (
             <Container>
                 <ToastContainer />
-                <h1 className='text-center text-danger'>Thống Kê</h1>
+                <h1 className='text-center text-danger'>Thống Kê Tài Nguyên Sử Dụng</h1>
                 <LineChart
                     className='mx-auto'
                     title='Chi phí'

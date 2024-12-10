@@ -1,22 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
-import { PieChart, Pie, Tooltip, Cell } from 'recharts';
-
-
+import { PieChart, Pie, Tooltip } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const PieCharts = () => {
-    const [equipement, setEquipements] = useState([])
     const [data, setData] = useState([])
     const [error, setError] = useState([])
     const [loading, setLoading] = useState([])
-
-
-    const data02 = [
-        { name: 'Số căn phòng trống', value: 100 },
-        { name: 'Số căn phòng đang sử dụng', value: 100 },
-        { name: 'Số căn phòng đang sửa chữa', value: 100 },
-    ];
 
     const fetchEquipments = async () => {
         try {
