@@ -206,54 +206,57 @@ const Service = () => {
 
             </div>
 
-            <Container className="table-content p-3 bg-white m-3">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="exampleForm.SelectCustom" className=" mb-3 w-75">
-                        {/* Optional */}
-                    </Form.Group>
-                    <Form.Group className="mb-2 container w-75">
-                        <Form.Label>Chọn Phòng</Form.Label>
-                        <Form.Select
-                            className="form-select"
-                            value={selectedApartmentName}
-                            onChange={(e) => setSelectedApartmentName(e.target.value)}
-                        >
-                            <option>-- Chọn căn hộ --</option>
-                            {apartments.map((apartment) => (
-                                <option key={apartment.apartment_id} value={apartment.apartment_id}>
-                                    {apartment.apartment_name}
-                                </option>
-                            ))}
-                        </Form.Select>
-                    </Form.Group>
+            <div>
+                <Container className="table-content bg-white py-3">
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="exampleForm.SelectCustom" className=" mb-3 w-75">
+                            {/* Optional */}
+                        </Form.Group>
+                        <Form.Group className="mb-2 container w-75">
+                            <Form.Label>Chọn Phòng</Form.Label>
+                            <Form.Select
+                                className="form-select"
+                                value={selectedApartmentName}
+                                onChange={(e) => setSelectedApartmentName(e.target.value)}
+                            >
+                                <option>-- Chọn căn hộ --</option>
+                                {apartments.map((apartment) => (
+                                    <option key={apartment.apartment_id} value={apartment.apartment_id}>
+                                        {apartment.apartment_name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
 
-                    <Form.Group className="mb-2 container w-75">
-                        <Form.Label>Nhập Số Điện Mới: </Form.Label>
-                        <Form.Control
-                            type="number"
-                            value={electricityNew}
-                            onChange={(e) => setElectricityNew(e.target.value)}
-                            placeholder="Nhập số điện mới"
-                        />
-                    </Form.Group>
+                        <Form.Group className="mb-2 container w-75">
+                            <Form.Label>Nhập Số Điện Mới: </Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={electricityNew}
+                                onChange={(e) => setElectricityNew(e.target.value)}
+                                placeholder="Nhập số điện mới"
+                            />
+                        </Form.Group>
 
-                    <Form.Group className="mb-4 container w-75">
-                        <Form.Label>Nhập Số Nước Mới: </Form.Label>
-                        <Form.Control
-                            type="number"
-                            value={waterNew}
-                            onChange={(e) => setWaterNew(e.target.value)}
-                            placeholder="Nhập số nước mới"
-                        />
-                    </Form.Group>
+                        <Form.Group className="mb-4 container w-75">
+                            <Form.Label>Nhập Số Nước Mới: </Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={waterNew}
+                                onChange={(e) => setWaterNew(e.target.value)}
+                                placeholder="Nhập số nước mới"
+                            />
+                        </Form.Group>
 
-                    <Form.Group className="mb-2 container w-50 text-center">
-                        <Button className="bg-primary text-light w-75" type="submit">
-                            Tính
-                        </Button>
-                    </Form.Group>
-                </Form>
-            </Container>
+                        <Form.Group className="mb-2 container w-50 text-center">
+                            <Button className="bg-primary text-light w-75" type="submit">
+                                Tính
+                            </Button>
+                        </Form.Group>
+                    </Form>
+                </Container>
+            </div>
+            
         </div>
     );
 };

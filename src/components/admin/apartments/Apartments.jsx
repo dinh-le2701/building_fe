@@ -266,7 +266,7 @@ const Apartments = () => {
                                     <td>{apartment.create_at}</td>
                                     <td>{apartment.update_at}</td>
                                     <td className="d-flex justify-content-around align-items-center">
-                                        <FaEye className="icon fs-2 pb-1 text-secondary fs-5" onClick={() => handleApartmentDetails(apartment.apartment_id)} />
+                                        <FaEye className="icon fs-2 pb-1 text-secondary fs-2" onClick={() => handleApartmentDetails(apartment.apartment_id)} />
                                         <CiEdit className="icon pb-1 fs-2 text-warning" onClick={() => handleUpdateShow(apartment)} />
                                     </td>
                                 </tr>

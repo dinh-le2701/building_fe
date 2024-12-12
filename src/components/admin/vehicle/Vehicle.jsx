@@ -79,7 +79,6 @@ const Vehicle = () => {
                             <th>Biển Số Xe</th>
                             <th>Loại Xe</th>
                             <th>Màu Sắc</th>
-                            <th>Vị Trí Đỗ Xe</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,7 +93,6 @@ const Vehicle = () => {
                                         <td>{vehicle.license_plate}</td>
                                         <td>{vehicle.vehicle_type}</td>
                                         <td>{vehicle.color}</td>
-                                        <td></td>
                                     </tr>
                                 ));
                             })

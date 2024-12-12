@@ -238,10 +238,7 @@ const ApartmentDetails = () => {
                     <Link className='px-3' to={"/admin/apartment"}>
                         <b>Trở về</b>
                     </Link>
-                    <Button>
-                        <IoIosPersonAdd className='icon  fs-2 text-light' onClick={handleShow} />
-                    </Button>
-
+                        <IoIosPersonAdd className='icon  fs-2 text-primary' onClick={handleShow} />
                 </div>
             </div>
 
@@ -351,12 +348,6 @@ const ApartmentDetails = () => {
                                         <td>{account.status}</td>
                                         <td>
                                             <CiTrash className='icon pb fs-2 text-danger' onClick={() => handleDeleteAccount(account.id, apartments.apartment_id)} />
-                                            {/* <Button
-                                                variant="danger"
-                                                
-                                            >
-                                                Xóa
-                                            </Button> */}
                                         </td>
 
                                     </tr>
@@ -393,11 +384,11 @@ const ApartmentDetails = () => {
                                 apartments.utilityUsages.map((utilityUsage, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
-                                        <td>{utilityUsage.create_date}</td>
-                                        <td>{utilityUsage.electricTotalPrice}</td>
-                                        <td>{utilityUsage.waterTotal_price}</td>
+                                        <td>{utilityUsage.createDate}</td>
+                                        <td>{utilityUsage.electricTotalPrice} đồng</td>
+                                        <td>{utilityUsage.waterTotal_price} đồng</td>
                                         <td>{utilityUsage.totalUsage}</td>
-                                        <td>{utilityUsage.totalPrice}</td>
+                                        <td>{utilityUsage.totalPrice} đồng</td>
                                         <td>
                                             <SiMinutemailer className="icon fs-2 pb-1 text-success fs-5" />
                                         </td>

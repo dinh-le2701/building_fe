@@ -6,7 +6,7 @@ import './Header.css'
 const Header = () => {
     return (
         <Container>
-            <div className='header d-flex justify-content-between align-items-center'>
+            <div className='header d-flex justify-content-between align-items-center mt-3'>
                 <div className="logo w-25">
                     <a href="/" className='d-flex justify-content-start align-items-center'>
 

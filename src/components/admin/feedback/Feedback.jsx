@@ -121,7 +121,13 @@ const Feedback = () => {
   useEffect(() => {
     fetchApartments();
     fetchFeedbacks(currentPage, size, selectedApartmentName);
-  }, [currentPage, size, selectedApartmentName]);
+    const intervalId = setInterval(() => {
+      fetchApartments();
+      fetchFeedbacks(currentPage, size, selectedApartmentName);
+      console.log("call")
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [currentPage, size, selectedApartmentName] );
 
 
   return (

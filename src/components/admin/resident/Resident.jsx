@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';
@@ -98,7 +99,7 @@ const Resident = () => {
             let response;
             if (isEditing) {
                 // Update existing resident
-                response = await fetch(`http://localhost:8181/api/resident/${currentResidentId}`, {
+                response = await fetch(`http://localhost:8181/api/v1/resident/${currentResidentId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,7 +171,7 @@ const Resident = () => {
     };
 
     // Open modal for editing resident
-    const handleShowEdit = (resident) => {
+    const handleShowEdit = (resident, id) => {
         setIsEditing(true); // Set to true to indicate editing a resident
         setCurrentResidentId(resident.id); // Set the ID of the resident being edited
         setNewResident({
@@ -185,6 +186,8 @@ const Resident = () => {
 
     // handle delete api
     const deleteResidentById = async (resident_id) => {
+        const confirmDelete = window.confirm("Bạn có chắc muốn xoá cư dân này không?");
+        if (!confirmDelete) return; 
         try {
             const response = await fetch(`http://localhost:8181/api/v1/resident/${resident_id}`, {
                 method: 'DELETE',
@@ -238,7 +241,7 @@ const Resident = () => {
                     </div>
                     <div>
                         <FaSquarePlus className='icon fs-1 text-primary' onClick={handleShowAdd} />
-                        <Button variant='success' onClick={handlePrint}>In</Button>
+                        {/* <Button variant='success' onClick={handlePrint}>In</Button> */}
                     </div>
                 </div>
 
@@ -265,8 +268,8 @@ const Resident = () => {
                                     <td>{resident.birthday}</td>
                                     <td>{resident.move_in_date}</td>
                                     <td className='d-flex justify-content-around align-items-center'>
-                                        <FaRegEye className='icon fs-2 text-success me-3' onClick={() => handleResidentDetails(resident.resident_id)}  style={{ fontWeight: "bold" }} />
-                                        <FaEdit className='icon pb fs-3 text-warning' onClick={() => handleShowEdit(resident)} />
+                                        <FaRegEye className='icon fs-2 text-secondary me-2' onClick={() => handleResidentDetails(resident.resident_id)}  style={{ fontWeight: "bold" }} />
+                                        <FaEdit className='icon pb fs-3 text-warning' onClick={() => handleShowEdit(resident.resident_id)} />
                                         <CiTrash className='icon pb fs-3 text-danger' onClick={() => deleteResidentById(resident.resident_id)} />
                                     </td>
                                 </tr>

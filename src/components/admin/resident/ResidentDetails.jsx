@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { FaAddressCard } from "react-icons/fa";
 import { MdPedalBike } from "react-icons/md";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { CiTrash } from "react-icons/ci";
 import { ReactNotifications, Store } from 'react-notifications-component';
 
 
@@ -18,6 +19,8 @@ const ResidentDetails = () => {
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   const [vehicles, setVehicles] = useState([])
+  const [parkings, setParkings] = useState([])
+  const [selectedParkingId, setSelectedParkingId] = useState("")
   const [newVehicle, setNewVehicle] = useState({
     vehicle_name: "",
     license_plate: "",
@@ -27,7 +30,15 @@ const ResidentDetails = () => {
 
   useEffect(() => {
     fetchResidentDetails();
+    fetchParking();
   }, [id]);
+
+  const fetchParking = async () => {
+    const response = await fetch("http://localhost:8181/api/v1/parking")
+    const data = await response.json();
+    setParkings(data);
+    console.log(data)
+  }
 
   const fetchResidentDetails = async () => {
     try {
@@ -85,51 +96,97 @@ const ResidentDetails = () => {
     }
   };
 
-  const createVehicle = async (apartmentData) => {
+  const createVehicle = async () => {
     try {
-      const response = await fetch(`http://localhost:8181/api/v1/resident/${id}/vehicles`, {
+      const response = await fetch(`http://localhost:8181/api/v1/resident/${id}/vehicles/${selectedParkingId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(apartmentData),
+        body: JSON.stringify(newVehicle), // Gửi đúng định dạng JSON từ state
       });
 
-      const data = await response.json();
       if (response.ok) {
-        setVehicles([...vehicles, data]); // Thêm căn hộ mới vào danh sách
-        handleClose(); // Đóng modal sau khi thêm thành công
-        fetchResidentDetails(); // Cập nhật lại danh sách căn hộ
+        const data = await response.json();
+        console.log("Phương tiện tạo thành công:", data);
+
         Store.addNotification({
-          title: "Tạo mới phương tiện thành công!",
-          type: "success", // green color for success
+          title: "Tạo mới phương tiện thành công!",
+          type: "success",
           insert: "top",
-          container: "top-left",
+          container: "top-right",
           dismiss: {
-            duration: 1000, // Auto-dismiss after 4 seconds
-            onScreen: true
-          }
+            duration: 2000,
+            onScreen: true,
+          },
         });
+        setShow();
+
+        fetchResidentDetails(); // Cập nhật lại danh sách phương tiện
       } else {
-        console.error('Lỗi khi thêm mới phương tiện:', data.message);
+        const errorData = await response.json();
+        console.error("Lỗi từ server:", errorData.message);
+
+        Store.addNotification({
+          title: "Tạo phương tiện thất bại!",
+          message: errorData.message,
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          dismiss: {
+            duration: 2000,
+            onScreen: true,
+          },
+        });
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Lỗi kết nối:", error.message);
+      Store.addNotification({
+        title: "Lỗi kết nối!",
+        message: error.message,
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        dismiss: {
+          duration: 2000,
+          onScreen: true,
+        },
+      });
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewVehicle(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createVehicle(newVehicle); // Gửi thông tin căn hộ mới
+    if (!selectedParkingId) {
+      alert("Vui lòng chọn bãi đỗ xe trước khi tạo phương tiện!");
+      return;
+    }
+    createVehicle(); // Gửi thông tin phương tiện mới
   };
+
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "parking_id") {
+      setSelectedParkingId(value);
+      setNewVehicle((prevState) => ({
+        ...prevState,
+        parking_id: value,
+      }));
+    } else {
+      setNewVehicle((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   createVehicle(newVehicle); // Gửi thông tin căn hộ mới
+  // };
 
   if (!residents) {
     return <div className='fs-1'>Loading...</div>;
@@ -137,7 +194,7 @@ const ResidentDetails = () => {
 
   const handleDeleteCard = async (id) => {
     const url = `http://localhost:8181/api/v1/resident/card/${id}`;
-    const confirmDelete = window.confirm("Bạn có chắc muốn thẻ của cư dân này không?");
+    const confirmDelete = window.confirm("Bạn có chắc muốn xoá thẻ của cư dân này không?");
 
     if (!confirmDelete) return; // Người dùng không xác nhận
 
@@ -161,6 +218,39 @@ const ResidentDetails = () => {
       } else {
         const errorMessage = await response.text();
         alert(`Xóa thẻ cư dân thất bại: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Đã xảy ra lỗi:", error);
+      alert("Đã xảy ra lỗi khi xóa thẻ của cư dân.");
+    }
+  }
+
+  const handleDeleteVehicle = async (vehicle_id) => {
+    const url = `http://localhost:8181/api/v1/resident/vehicle/${vehicle_id}`;
+    const confirmDelete = window.confirm("Bạn có chắc muốn xoá phương tiện của cư dân này không?");
+
+    if (!confirmDelete) return; // Người dùng không xác nhận
+
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        Store.addNotification({
+          title: "Xoá phương tiện cư dân thành công!",
+          type: "success", // green color for success
+          insert: "top",
+          container: "top-left",
+          dismiss: {
+            duration: 4000, // Auto-dismiss after 4 seconds
+            onScreen: true
+          }
+        });
+        fetchResidentDetails();
+      } else {
+        const errorMessage = await response.text();
+        alert(`Xóa phương tiện cư dân thất bại: ${errorMessage}`);
       }
     } catch (error) {
       console.error("Đã xảy ra lỗi:", error);
@@ -240,6 +330,7 @@ const ResidentDetails = () => {
                 <th>Loại Phương Tiện</th>
                 <th>Biển Số</th>
                 <th>Màu Sắc</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -252,9 +343,9 @@ const ResidentDetails = () => {
                       <td>{vehicle.vehicle_type}</td>
                       <td>{vehicle.license_plate}</td>
                       <td>{vehicle.color}</td>
-                      {/* <td>
-                        <Button variant='danger' onClick={() => { handleDeleteCard(card.id) }}>Xoá</Button>
-                      </td> */}
+                      <td>
+                        <CiTrash className='icon pb fs-1 text-danger' onClick={() => { handleDeleteVehicle(vehicle.vehicle_id) }} />
+                      </td>
                     </tr>
                   ))
                 ) : (
@@ -269,7 +360,7 @@ const ResidentDetails = () => {
       <div className=' bg-white m-3 p-5'>
         <Container className='w-75'>
           <h4 className='text-center'>Thẻ Cho Cư Dân</h4>
-          <Table hover className='text-center w-100'>
+          <Table hover className='text-center'>
             <thead>
               <tr>
                 <th>STT</th>
@@ -279,24 +370,26 @@ const ResidentDetails = () => {
                 <th></th>
               </tr>
             </thead>
-            {
-              cards.length > 0 ? (
-                cards.map((card, id) => (
-                  <tr key={id}>
-                    <td>{id + 1}</td>
-                    <td>{card.cardCode}</td>
-                    <td>{card.card_status}</td>
-                    <td>{card.createDate}</td>
-                    <td>
-                      <Button variant='danger' onClick={() => { handleDeleteCard(card.id) }}>Xoá</Button>
-                    </td>
+            <tbody>
+              {
+                cards.length > 0 ? (
+                  cards.map((card, id) => (
+                    <tr key={id}>
+                      <td>{id + 1}</td>
+                      <td>{card.cardCode}</td>
+                      <td>{card.card_status}</td>
+                      <td>{card.createDate}</td>
+                      <td>
+                        <CiTrash className='icon pb fs-1 text-danger' onClick={() => { handleDeleteCard(card.id) }} />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className='text-center'>
+                    <td colSpan="9">Không có thông tin thẻ cho cư dân</td>
                   </tr>
-                ))
-              ) : (
-                <tr className='text-center'>
-                  <td colSpan="9">Không có thông tin thẻ cho cư dân</td>
-                </tr>
-              )}
+                )}
+            </tbody>
           </Table>
         </Container>
       </div>
@@ -349,6 +442,28 @@ const ResidentDetails = () => {
                 onChange={handleChange}
               />
             </Form.Group>
+
+            <Form.Select
+              className="form-select"
+              value={selectedParkingId}
+              onChange={(e) => setSelectedParkingId(e.target.value)}
+            >
+              <option value="">-- Chọn Bãi Giữ Xe --</option>
+              {parkings.map((parking, id) => {
+                return <option key={parking.id} value={parking.id}>
+                  {parking.park_name} - {parking.park_name}
+                </option>
+              })}
+              {/* {parkings && parkings.length > 0 ? (
+                parkings.content.map((parking) => (
+                  <option key={parking.id} value={parking.id}>
+                    {parking.park_name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Không tìm thấy bãi đỗ xe nào</option>
+              )} */}
+            </Form.Select>
           </Form>
         </Modal.Body>
         <Modal.Footer>

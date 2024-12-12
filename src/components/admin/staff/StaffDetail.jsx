@@ -122,10 +122,6 @@ const StaffDetail = () => {
                 <th>Số giờ làm việc:</th>
                 <td>{staffs.work_time}</td>
               </tr>
-              <tr>
-                <th>Trạng thái:</th>
-                <td>{staffs.stafStatus}</td>
-              </tr>
             </tbody>
           </Table>
         </div>
