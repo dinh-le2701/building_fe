@@ -211,7 +211,7 @@ const Feedback = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5">Không tìm thấy phản hồi</td>
+                <td colSpan="6">Không tìm thấy phản hồi</td>
               </tr>
             )}
           </tbody>

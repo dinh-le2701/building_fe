@@ -328,7 +328,7 @@ const Apartments = () => {
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
+                        {/* <Form.Group className="mb-3">
                             <Form.Label>Trạng Thái</Form.Label>
                             <Form.Select
                                 name="apartmentStatus"
@@ -344,7 +344,7 @@ const Apartments = () => {
                                 <option value="ĐANG SỬ DỤNG">ĐANG SỬ DỤNG</option>
                                 <option value="ĐANG SỬA CHỮA">ĐANG SỬA CHỮA</option>
                             </Form.Select>
-                        </Form.Group>
+                        </Form.Group> */}
 
                     </Form>
                 </Modal.Body>

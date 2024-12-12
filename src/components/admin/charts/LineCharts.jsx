@@ -46,7 +46,7 @@ export default class Example extends PureComponent {
             <Container>
                 <ToastContainer />
                 <h1 className='text-center text-primary mb-5'>Thống Kê Tài Nguyên Sử Dụng</h1>
-                <LineChart
+                {/* <LineChart
                     className='mx-auto'
                     title='Chi phí'
                     width={900}
@@ -66,7 +66,7 @@ export default class Example extends PureComponent {
                     <Legend />
                     <Line connectNulls type="monotone" dataKey="uv" stroke="#938569" fill="#8884d8" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="Tổng Tiền" stroke="#cf5820" activeDot={{ r: 8 }} />
-                </LineChart>
+                </LineChart> */}
 
                 <LineChart
                     className='mx-auto'
@@ -87,7 +87,7 @@ export default class Example extends PureComponent {
                     <Tooltip />
                     <Legend />
                     <Line connectNulls type="monotone" dataKey="uv" stroke="#938569" fill="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="Tổng Điện Sử Dụng"  stroke="#f5ac67" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="Tổng Điện Sử Dụng" stroke="#f5ac67" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="Tổng Nước Sử Dụng" stroke="#cf5820" activeDot={{ r: 8 }} />
                 </LineChart>
             </Container>

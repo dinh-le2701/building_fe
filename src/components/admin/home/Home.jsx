@@ -12,6 +12,7 @@ import { GrUserWorker } from "react-icons/gr";
 import { FaFireExtinguisher } from "react-icons/fa";
 import { MdFeedback } from "react-icons/md";
 import FeedbackChart from '../charts/FeedbackChart.jsx';
+import TotalChart from '../charts/TotalChart.jsx';
 
 
 
@@ -216,8 +217,9 @@ const Home = () => {
             <div className="charts">
                 <Row>
                     <Col>
-                        <div className="charts bg-white m-4 py-5">
+                        <div className="charts bg-white m-4 py-5 d-flex justify-content-between align-items-center">
                             <LineCharts/>
+                            <TotalChart/>
                         </div>
                     </Col>
                 </Row>
