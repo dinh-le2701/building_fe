@@ -187,7 +187,7 @@ const Resident = () => {
     // handle delete api
     const deleteResidentById = async (resident_id) => {
         const confirmDelete = window.confirm("Bạn có chắc muốn xoá cư dân này không?");
-        if (!confirmDelete) return; 
+        if (!confirmDelete) return;
         try {
             const response = await fetch(`http://localhost:8181/api/v1/resident/${resident_id}`, {
                 method: 'DELETE',
@@ -239,10 +239,10 @@ const Resident = () => {
                         </select>
                         mục
                     </div>
-                    <div>
+                    {/* <div>
                         <FaSquarePlus className='icon fs-1 text-primary' onClick={handleShowAdd} />
-                        {/* <Button variant='success' onClick={handlePrint}>In</Button> */}
-                    </div>
+                        <Button variant='success' onClick={handlePrint}>In</Button>
+                    </div> */}
                 </div>
 
                 <Table hover striped className='w-100 m-0 text-center'>
@@ -268,7 +268,7 @@ const Resident = () => {
                                     <td>{resident.birthday}</td>
                                     <td>{resident.move_in_date}</td>
                                     <td className='d-flex justify-content-around align-items-center'>
-                                        <FaRegEye className='icon fs-2 text-secondary me-2' onClick={() => handleResidentDetails(resident.resident_id)}  style={{ fontWeight: "bold" }} />
+                                        <FaRegEye className='icon fs-2 text-secondary me-2' onClick={() => handleResidentDetails(resident.resident_id)} style={{ fontWeight: "bold" }} />
                                         <FaEdit className='icon pb fs-3 text-warning' onClick={() => handleShowEdit(resident.resident_id)} />
                                         <CiTrash className='icon pb fs-3 text-danger' onClick={() => deleteResidentById(resident.resident_id)} />
                                     </td>

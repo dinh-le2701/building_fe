@@ -129,42 +129,6 @@ const StaffDetail = () => {
 
       </div>
 
-      <div className='bg-white m-3 p-5'>
-        <h3 className='fw-bold text-center'>Lịch Làm Việc</h3>
-
-        <div className='work-time'>
-          <Table table bordered striped hover className='text-center'>
-            <thead></thead>
-            <tbody>
-              <tr>
-                <td>Thứ</td>
-                <td>Tổng Thời Gian</td>
-                <td>Thời Gian Cụ Thể</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>8h</td>
-                <td>13:00 tới 18:00</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>8h</td>
-                <td>13:00 tới 18:00</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>8h</td>
-                <td>13:00 tới 18:00</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>8h</td>
-                <td>13:00 tới 18:00</td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-      </div>
     </div>
   );
 };

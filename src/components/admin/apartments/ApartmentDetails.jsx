@@ -283,7 +283,7 @@ const ApartmentDetails = () => {
                                 <th>STT</th>
                                 <th>Tên Phòng</th>
                                 <th>Tên Người Dân</th>
-                                <th>Giới Tính</th>
+                                <th>Ngày Sinh</th>
                                 <th>Số ĐT</th>
                                 <th>Email</th>
                                 <th>Ngày Nhận Phòng</th>
@@ -297,7 +297,7 @@ const ApartmentDetails = () => {
                                         <td>{id + 1}</td>
                                         <td>{apartments.apartment_name}</td>
                                         <td>{resident.resident_name}</td>
-                                        <td>{resident.sex}</td>
+                                        <td>{resident.birthday}</td>
                                         <td>{resident.phone_number}</td>
                                         <td>{resident.email}</td>
                                         <td>{resident.move_in_date}</td>

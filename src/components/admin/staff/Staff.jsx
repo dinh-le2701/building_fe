@@ -218,7 +218,6 @@ const Staff = () => {
                             <th>Email</th>
                             <th>Số Điện Thoại</th>
                             <th>Ngày Sinh</th>
-                            <th>Số giờ làm</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -242,7 +241,6 @@ const Staff = () => {
                                     <td>{staff.email}</td>
                                     <td>{staff.phone}</td>
                                     <td>{staff.birthday}</td>
-                                    <td>{staff.work_time}</td>
                                     <td className="d-flex justify-content-around align-items-center">
                                         <FaRegEye className='icon fs-2 text-secondary me-2' onClick={() => handleResidentDetails(staff.staff_id)} style={{ fontWeight: "bold" }} />
                                         <CiEdit className="icon pb-1 fs-2 me-1 text-warning"  />
@@ -339,16 +337,6 @@ const Staff = () => {
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Số Giờ Làm Việc</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name='work_time'
-                                value={newStaff.work_time}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
 
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>

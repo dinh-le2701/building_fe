@@ -330,7 +330,7 @@ const Accounts = () => {
                         <Form.Group className="mb-3">
                             <Form.Label>Mật Khẩu</Form.Label>
                             <Form.Control
-                                type="text"
+                                type="password"
                                 name='password'
                                 value={account.password}
                                 onChange={handleChange}
