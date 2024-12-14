@@ -451,7 +451,7 @@ const ResidentDetails = () => {
               <option value="">-- Chọn Bãi Giữ Xe --</option>
               {parkings.map((parking, id) => {
                 return <option key={parking.id} value={parking.id}>
-                  {parking.park_name} - {parking.park_name}
+                  {parking.park_name} - {parking.park_type}
                 </option>
               })}
               {/* {parkings && parkings.length > 0 ? (
