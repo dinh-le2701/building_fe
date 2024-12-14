@@ -151,10 +151,10 @@ const Sidebar = () => {
                         {/* Hiển thị submenu nếu được bật */}
                         {menu.payment && (
                             <div style={{ paddingLeft: '20px' }}>
-                                <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/convenient">
+                                {/* <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/convenient">
                                     <CiMoneyBill className='me-3' />
                                     Tiện Ích
-                                </Nav.Link>
+                                </Nav.Link> */}
                                 <Nav.Link className='form-control d-flex align-items-center  my-3' href="/admin/services">
                                     <MdDesignServices className='me-3' />
                                     Dịch Vụ
