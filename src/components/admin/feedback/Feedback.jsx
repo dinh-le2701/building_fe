@@ -39,10 +39,10 @@ const Feedback = () => {
       if (selectedApartmentName) {
         url = `http://localhost:8181/api/v1/feedback/apartment_name/${selectedApartmentName}`;
       }
-  
+
       const response = await fetch(url);
       const data = await response.json();
-  
+
       // Lưu danh sách feedback vào state
       setFeedbacks(data.content || data); // Dữ liệu feedback có thể nằm trong `content` (phân trang)
       setTotalPages(data.page.totalPages);
@@ -50,7 +50,7 @@ const Feedback = () => {
       console.error("Error fetching feedbacks:", error);
     }
   };
-  
+
 
   // Xem chi tiết phản hồi
   const showFeedbackId = async (id) => {
@@ -58,6 +58,7 @@ const Feedback = () => {
       const response = await fetch(`http://localhost:8181/api/v1/feedback/${id}`);
       const data = await response.json();
       setFeedbackDetail(data);
+      console.log(data)
       handleShow();
     } catch (error) {
       console.error("Error fetching feedback detail:", error);
@@ -121,13 +122,14 @@ const Feedback = () => {
   useEffect(() => {
     fetchApartments();
     fetchFeedbacks(currentPage, size, selectedApartmentName);
+    console.log(feedbacks)
     const intervalId = setInterval(() => {
       fetchApartments();
       fetchFeedbacks(currentPage, size, selectedApartmentName);
-      console.log("call")
-    }, 1000);
+      console.log("feedback: " + feedbackDetail)
+    }, 3000);
     return () => clearInterval(intervalId);
-  }, [currentPage, size, selectedApartmentName] );
+  }, [currentPage, size, selectedApartmentName]);
 
 
   return (
@@ -145,6 +147,7 @@ const Feedback = () => {
           <div className="select-group">
             Hiển thị
             <select className="mx-2" value={size} onChange={handlePageSizeChange}>
+              <option value="1000">Toàn bộ</option>
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
@@ -179,7 +182,6 @@ const Feedback = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Feedback ID</th>
               <th>Tiêu Đề</th>
               <th>Trạng Thái</th>
               <th>Ngày Tạo</th>
@@ -191,7 +193,8 @@ const Feedback = () => {
               feedbacks.map((feedback, index) => (
                 <tr key={index}>
                   <td>{currentPage * size + index + 1}</td>
-                  <td>{feedback.id}</td>
+                  {/* <td>{feedback.apartmentName}</td>
+                  <td>{feedback.id}</td> */}
                   <td>{feedback.title}</td>
                   <td>{feedback.feedbackStatus}</td>
                   <td>{feedback.createDate}</td>
@@ -237,6 +240,10 @@ const Feedback = () => {
         </Modal.Header>
         <Modal.Body className='p-4'>
           <Table>
+            <tr>
+              <h5>Tên Căn Hộ:</h5>
+              <th className='h3'>{feedbackDetail.apartmentName}</th>
+            </tr>
             <tr>
               <h5>Tiêu đề:</h5>
               <td>{feedbackDetail.title}</td>

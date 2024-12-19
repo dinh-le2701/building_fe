@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { SiMinutemailer } from "react-icons/si";
 import { CiTrash } from "react-icons/ci";
 import { IoIosPersonAdd } from "react-icons/io";
+import { TbHomeMove } from "react-icons/tb";
 import fetchURL from '../../../api/AxiosInstance';
 import { ReactNotifications, Store } from 'react-notifications-component';
 import "../icon.css"
@@ -15,9 +16,13 @@ const ApartmentDetails = () => {
     const { id } = useParams();
     const [show, setShow] = useState(false);
     const [apartments, setApartments] = useState([]);
+    const [changeShow, setChangeShow] = useState(false)
+    const [listApartment, setListApartment] = useState([])
     const [residentApartment, setResidentApartment] = useState([])
     const [accountId, setAccountId] = useState(null);
     const [selectedApartmentId, setSelectedApartmentId] = useState(null);
+    const [selectedApartmentName, setSelectedApartmentName] = useState("");
+    const [residentId, setResidentId] = useState([])
     const [newResident, setNewResident] = useState({
         resident_name: "",
         email: "",
@@ -46,6 +51,8 @@ const ApartmentDetails = () => {
     }
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+    const handleChangeShow = () => setChangeShow(true);
+    const handleChangeClose = () => setChangeShow(false)
     const fetchApartmentDetails = async () => {
         try {
             const response = await fetch(`http://localhost:8181/api/v1/apartment/${id}`);
@@ -77,17 +84,29 @@ const ApartmentDetails = () => {
 
     useEffect(() => {
         fetchApartmentDetails();
+        fetchApartments()
     }, [id]);
 
 
     if (!apartments) {
         return <div>Loading...</div>;
     }
+    const fetchApartments = async () => {
+        try {
+            const response = await fetch("http://localhost:8181/api/v1/apartment");
+            const data = await response.json();
+            setListApartment(data.content); // Xử lý nếu data.content tồn tại
+            console.log(data.content); // Log data sau khi lấy thông tin căn hộ
+        } catch (error) {
+            console.error("Error fetching apartments:", error);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         createResidentInApartment(newResident); // Gửi thông tin căn hộ mới
     };
+
     const createResidentInApartment = async (residentData) => {
         try {
             const response = await fetch(`http://localhost:8181/api/v1/apartment/${id}/resident`, {
@@ -116,7 +135,7 @@ const ApartmentDetails = () => {
             } else {
                 Store.addNotification({
                     title: "Thêm cư dân lỗi",
-                    message: newErrors.join("\n"),
+                    message: data.message,
                     type: "warning", // green color for success
                     insert: "top",
                     container: "top-left",
@@ -140,6 +159,61 @@ const ApartmentDetails = () => {
             });
         }
     };
+
+    const handleChangeApartment = async (residentId, id) => {
+        try {
+            const response = await fetch(`http://localhost:8181/api/v1/resident/into/${id}/${residentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(),  // Nếu có dữ liệu khác cần gửi thì thêm vào đây
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Resident changed successfully', data);
+                handleChangeClose();  // Đóng Modal sau khi thành công
+                Store.addNotification({
+                    title: "Chuyển phòng cho cư dân thành công",
+                    type: "success",
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                        duration: 2000,
+                        onScreen: true
+                    }
+                });
+                fetchApartmentDetails();
+            } else {
+                Store.addNotification({
+                    title: "Chuyển phòng cho cư dân thất bại",
+                    message: data.message,
+                    type: "warning",
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+            }
+        } catch (e) {
+            Store.addNotification({
+                title: "Lỗi khi chuyển phòng cho cư dân",
+                type: "danger",
+                insert: "top",
+                container: "top-left",
+                dismiss: {
+                    duration: 2000,
+                    onScreen: true
+                }
+            });
+        }
+    };
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setNewResident(prevState => ({
@@ -148,20 +222,23 @@ const ApartmentDetails = () => {
         }));
     }
 
-    const handleDelete = async (residentId) => {
-        const url = `http://localhost:8181/api/v1/resident/${residentId}`;
-        const confirmDelete = window.confirm("Bạn có chắc muốn xóa cư dân này không?");
+    const handleDelete = async (resident_id, apartment_id) => {
+        const url = `http://localhost:8181/api/v1/apartment/${apartment_id}/delete-resident-from-apartment/${resident_id}`;
+        const confirmDelete = window.confirm("Bạn có chắc muốn xóa cư dân này khỏi căn hộ không?");
 
         if (!confirmDelete) return; // Người dùng không xác nhận
 
         try {
             const response = await fetch(url, {
-                method: "DELETE",
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
 
             if (response.ok) {
                 Store.addNotification({
-                    title: "Xoá cư dân thành công!",
+                    title: "Xoá cư dân khỏi căn hộ thành công!",
                     type: "success", // green color for success
                     insert: "top",
                     container: "top-left",
@@ -173,7 +250,7 @@ const ApartmentDetails = () => {
                 fetchApartmentDetails();
             } else {
                 const errorMessage = await response.text();
-                alert(`Xóa cư dân thất bại: ${errorMessage}`);
+                alert(`Xóa cư dân khỏi căn hộ thất bại: ${errorMessage}`);
             }
         } catch (error) {
             console.error("Đã xảy ra lỗi:", error);
@@ -238,7 +315,7 @@ const ApartmentDetails = () => {
                     <Link className='px-3' to={"/admin/apartment"}>
                         <b>Trở về</b>
                     </Link>
-                        <IoIosPersonAdd className='icon  fs-2 text-primary' onClick={handleShow} />
+                    <IoIosPersonAdd className='icon  fs-2 text-primary' onClick={handleShow} />
                 </div>
             </div>
 
@@ -284,6 +361,7 @@ const ApartmentDetails = () => {
                                 <th>Tên Phòng</th>
                                 <th>Tên Người Dân</th>
                                 <th>Ngày Sinh</th>
+                                <th>Căn Cước Công Dân</th>
                                 <th>Số ĐT</th>
                                 <th>Email</th>
                                 <th>Ngày Nhận Phòng</th>
@@ -298,13 +376,20 @@ const ApartmentDetails = () => {
                                         <td>{apartments.apartment_name}</td>
                                         <td>{resident.resident_name}</td>
                                         <td>{resident.birthday}</td>
+                                        <td>{resident.cccd}</td>
                                         <td>{resident.phone_number}</td>
                                         <td>{resident.email}</td>
                                         <td>{resident.move_in_date}</td>
                                         <td>
+                                            <TbHomeMove
+                                                className='icon pb fs-3 text-primary me-2'
+                                                onClick={() => {
+                                                    setResidentId(resident.resident_id); // Lưu residentId của cư dân cần chuyển phòng
+                                                    handleChangeShow(); // Mở Modal
+                                                }}
+                                            />
                                             <CiTrash className='icon pb fs-2 text-danger' onClick={() => {
-                                                setAccountId(apartments.account)
-                                                handleDelete(resident.resident_id)
+                                                handleDelete(resident.resident_id, apartments.apartment_id)
                                             }} />
                                             {/* <Button variant='danger' onClick={() => {
                                                 setAccountId(apartments.account)
@@ -315,7 +400,7 @@ const ApartmentDetails = () => {
                                 ))
                             ) : (
                                 <tr className='text-center'>
-                                    <td colSpan="9">No apartments found</td>
+                                    <td colSpan="9">Không tìm thấy cư dân trong căn hộ</td>
                                 </tr>
                             )}
                         </tbody>
@@ -354,7 +439,7 @@ const ApartmentDetails = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="5">No accounts available</td>
+                                    <td colSpan="5">Không có tài khoản nào cho căn hộ</td>
                                 </tr>
                             )}
                         </tbody>
@@ -364,7 +449,7 @@ const ApartmentDetails = () => {
 
             {/* Thông tin dịch vụ sử dụng cho căn hộ */}
             <div className="apartment-resident-details bg-white m-3 p-3">
-                <Container className='w-75'>
+                <Container className='w-100'>
                     <h4 className="text-center">Thông tin dịch vụ sử dụng</h4>
 
                     <Table className='w-100 text-center' hover responsive>
@@ -372,10 +457,16 @@ const ApartmentDetails = () => {
                             <tr>
                                 <th>STT</th>
                                 <th>Ngày Tạo</th>
-                                <th>Tổng Giá Điện</th>
-                                <th>Tổng Giá Nước</th>
-                                <th>Tổng Sử Dụng</th>
-                                <th>Giá Tổng</th>
+                                <th>Số kWh Điện Cũ</th>
+                                <th>Số kWh Điện Mới</th>
+                                <th>Tổng Số kWh Điện Sử Dụng</th>
+                                <th>Tổng Tiền Điện</th>
+                                <th>Số m<sup>3</sup> Nước Cũ</th>
+                                <th>Số m<sup>3</sup> Nước Mới</th>
+                                <th>Tổng Số m<sup>3</sup> Nước Sử Dụng</th>
+                                <th>Tổng Tiền Nước</th>
+                                <th>Tổng Lượng Sử Dụng (nước + điện)</th>
+                                <th>Tổng Tiền</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -385,10 +476,17 @@ const ApartmentDetails = () => {
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{utilityUsage.createDate}</td>
+                                        <td>{utilityUsage.electricity_old}</td>
+                                        <td>{utilityUsage.electricity_new}</td>
+                                        <td>{utilityUsage.electricityTotalUsage}</td>
                                         <td>{utilityUsage.electricTotalPrice} đồng</td>
-                                        <td>{utilityUsage.waterTotal_price} đồng</td>
+                                        <td>{utilityUsage.water_old}</td>
+                                        <td>{utilityUsage.water_new}</td>
+                                        <td>{utilityUsage.waterTotalUsage}</td>
+                                        <td>{utilityUsage.waterTotal_price}</td>
                                         <td>{utilityUsage.totalUsage}</td>
-                                        <td>{utilityUsage.totalPrice} đồng</td>
+                                        <td>{utilityUsage.totalPrice}</td>
+                                        <td></td>
                                         <td>
                                             <SiMinutemailer className="icon fs-2 pb-1 text-success fs-5" />
                                         </td>
@@ -396,7 +494,7 @@ const ApartmentDetails = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="6">No accounts available</td>
+                                    <td colSpan="13">No accounts available</td>
                                 </tr>
                             )}
                         </tbody>
@@ -492,6 +590,41 @@ const ApartmentDetails = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={changeShow} onHide={handleChangeClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Chuyển Phòng Cho Cư Dân</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={(e) => { e.preventDefault(); handleChangeApartment(residentId, selectedApartmentName); }}>
+                        <Form.Group className="mb-5 container w-75">
+                            <Form.Label>Chọn Phòng</Form.Label>
+                            <Form.Select
+                                className="form-select"
+                                value={selectedApartmentName}
+                                onChange={(e) => setSelectedApartmentName(e.target.value)}
+                            >
+                                <option>-- Chọn căn hộ --</option>
+                                {listApartment.map((apartment) => (
+                                    <option key={apartment.apartment_id} value={apartment.apartment_id}>
+                                        {apartment.apartment_name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleChangeClose}>
+                                Hủy
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Xác Nhận
+                            </Button>
+                        </Modal.Footer>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
         </div>
     );
 };

@@ -58,7 +58,7 @@ const Sidebar = () => {
                     <Nav className="btn-click me-auto mb-3">
                         <Nav.Link className='form-control d-flex align-items-center ' href="/admin">
                             <MdOutlineDashboard className='me-3' />
-                            Trạng Chủ
+                            Trang Chủ
                         </Nav.Link>
                     </Nav>
 

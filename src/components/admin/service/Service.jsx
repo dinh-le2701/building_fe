@@ -6,6 +6,8 @@ import './Service.css'
 
 const Service = () => {
     const [selectedApartmentName, setSelectedApartmentName] = useState("");
+    const [latestUtilityUsage, setLatestUtilityUsage] = useState(null);
+    const [selectedApartmentId, setSelectedApartmentId] = useState("");
     const [apartments, setApartments] = useState([]);
     const [electricityNew, setElectricityNew] = useState('');
     const [waterNew, setWaterNew] = useState('');
@@ -86,6 +88,26 @@ const Service = () => {
                     onScreen: true
                 }
             });
+        }
+    };
+
+    const handleApartmentChange = async (apartmentId) => {
+        setSelectedApartmentId(apartmentId);
+
+        if (apartmentId) {
+            try {
+                const response = await fetch(`http://localhost:8181/api/v1/utility-usage/latest/${apartmentId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setLatestUtilityUsage(data); // Cập nhật bản ghi gần nhất
+                } else {
+                    console.error("Failed to fetch utility usage");
+                    setLatestUtilityUsage(null); // Xóa dữ liệu nếu không tìm thấy
+                }
+            } catch (error) {
+                console.error("Error fetching utility usage:", error);
+                setLatestUtilityUsage(null);
+            }
         }
     };
 
@@ -208,6 +230,87 @@ const Service = () => {
 
             <div>
                 <Container className="table-content bg-white py-3">
+                    <div>
+                        {latestUtilityUsage ? (
+                            <div className="mt-4 container">
+                                <h5 className="text-primary">Thông Tin Sử Dụng Gần Nhất</h5>
+                                <table className="table table-bordered table-hover">
+                                    <thead className="thead-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Thông Tin</th>
+                                            <th>Giá Trị</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Ngày Tạo</td>
+                                            <td>{latestUtilityUsage.createDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Ngày Cập Nhật</td>
+                                            <td>{latestUtilityUsage.updateDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Điện (Cũ - Mới)</td>
+                                            <td>{latestUtilityUsage.electricity_old} - {latestUtilityUsage.electricity_new}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Tổng Sử Dụng Điện</td>
+                                            <td>{latestUtilityUsage.electricityTotalUsage} kWh</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Tổng Tiền Điện</td>
+                                            <td>{latestUtilityUsage.electricTotalPrice} VND</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Nước (Cũ - Mới)</td>
+                                            <td>{latestUtilityUsage.water_old} - {latestUtilityUsage.water_new}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>Tổng Sử Dụng Nước</td>
+                                            <td>{latestUtilityUsage.waterTotalUsage} m³</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>Tổng Tiền Nước</td>
+                                            <td>{latestUtilityUsage.waterTotal_price} VND</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>Phí Vệ Sinh</td>
+                                            <td>{latestUtilityUsage.hygiene_price} VND</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>Phí Quản Lý</td>
+                                            <td>{latestUtilityUsage.manage_price} VND</td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>Tổng Lượng Điện - Nước Sử Dụng</td>
+                                            <td>{latestUtilityUsage.totalUsage} VND</td>
+                                        </tr>
+                                        <tr>
+                                            <td>12</td>
+                                            <td>Tổng Tiền Thanh Toán</td>
+                                            <td>{latestUtilityUsage.totalPrice} VND</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <div className="mt-7 text-center">Không có dữ liệu nào để hiển thị.</div>
+                        )}
+
+                    </div>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="exampleForm.SelectCustom" className=" mb-3 w-75">
                             {/* Optional */}
@@ -216,10 +319,10 @@ const Service = () => {
                             <Form.Label>Chọn Phòng</Form.Label>
                             <Form.Select
                                 className="form-select"
-                                value={selectedApartmentName}
-                                onChange={(e) => setSelectedApartmentName(e.target.value)}
+                                value={selectedApartmentId}
+                                onChange={(e) => handleApartmentChange(e.target.value)}
                             >
-                                <option>-- Chọn căn hộ --</option>
+                                <option value="">-- Chọn căn hộ --</option>
                                 {apartments.map((apartment) => (
                                     <option key={apartment.apartment_id} value={apartment.apartment_id}>
                                         {apartment.apartment_name}
@@ -256,7 +359,7 @@ const Service = () => {
                     </Form>
                 </Container>
             </div>
-            
+
         </div>
     );
 };
